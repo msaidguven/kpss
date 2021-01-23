@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <Button
+        android:id="@+id/secenkA"
+        android:layout_width="wrap_content"
+        android:layout_height="70dp"
+        android:layout_weight="1"
+        android:onClick="secenekClick"
+        android:padding="15dp"
+        android:text="A" />
+
+    <Button
+        android:id="@+id/secenkB"
+        android:text="B"
+        android:onClick="secenekClick"
+        android:layout_weight="1"
+        android:padding="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="70dp"/>
+
+    <Button
+        android:id="@+id/secenkC"
+        android:text="C"
+        android:onClick="secenekClick"
+        android:layout_weight="1"
+        android:padding="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="70dp"/>
+
+    <Button
+        android:id="@+id/secenkD"
+        android:text="D"
+        android:onClick="secenekClick"
+        android:layout_weight="1"
+        android:padding="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="70dp"/>
+
+    <Button
+        android:id="@+id/secenkE"
+        android:text="E"
+        android:onClick="secenekClick"
+        android:layout_weight="1"
+        android:padding="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="70dp"/>
+
+
+</LinearLayout>

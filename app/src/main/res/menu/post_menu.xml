@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/action_like"
+        android:orderInCategory="300"
+        android:title="Like"
+        android:icon="@drawable/icon_setting"
+        app:showAsAction="ifRoom"></item>
+
+
+
+    <item
+        android:id="@+id/menu_signOut"
+        android:icon="@drawable/icon_sign_out"
+        android:title="Bildir" />
+
+
+
+    <item
+        android:id="@+id/menu_addPost"
+        android:icon="@drawable/icon_setting"
+        android:title="Düzenle" />
+
+    <item
+        android:id="@+id/menu_addCategory"
+        android:icon="@drawable/icon_setting"
+        android:title="Sil" />
+
+
+    <item
+        android:id="@+id/menu_settings"
+        android:icon="@drawable/icon_setting"
+        android:title="Paylaş" />
+
+
+
+</menu>

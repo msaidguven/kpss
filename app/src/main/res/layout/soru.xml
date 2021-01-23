@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:background="@color/backround"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:paddingTop="80dp"
+        android:paddingHorizontal="20dp"
+        android:paddingBottom="20dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:text="Tarih"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:textSize="27sp"
+            android:textColor="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:text="Tarih"
+            android:textSize="27sp"
+            android:textColor="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+<View
+    android:layout_margin="25dp"
+    android:background="@color/white"
+    android:layout_width="match_parent"
+    android:layout_height="1dp"/>
+
+
+    <TextView
+        android:padding="30dp"
+        android:layout_gravity="center"
+        android:text="Tanrının gölgesi unvanina sahip hükümdar kimdir?"
+        android:textSize="27sp"
+        android:textColor="@color/white"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:text="Attila"
+        android:background="@drawable/bg_menu"
+        style="@style/dogruSecenekVertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:text="Mete Han"
+        android:background="@drawable/bg_menu"
+        style="@style/yanlisSecenekVertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <Button
+        android:text="Uluğ Bey"
+        android:background="@drawable/bg_menu"
+        style="@style/seceneklerVertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <Button
+        android:text="Tonyukuk"
+        android:background="@drawable/bg_menu"
+        style="@style/seceneklerVertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <Button
+        android:text="Gazneli Mahmut"
+        android:background="@drawable/bg_menu"
+        style="@style/seceneklerVertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+
+    <LinearLayout
+    android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#544567"
+        android:orientation="vertical">
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="30dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:text="Tarih"
+                android:textColor="@color/white"
+                android:textSize="27sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:text="Tarih"
+                android:textColor="@color/white"
+                android:textSize="27sp" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_margin="15dp"
+            android:background="@color/white" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="30dp"
+            android:text="Tanrının gölgesi unvanina sahip hükümdar kimdir?\n
+Tanrının gölgesi unvanina sahip hükümdar kimdir?\n
+A. Attila\n
+B. Mete Han\n
+C. Uluğ Bey\n
+D. Tonyukuk\n
+E. Gazneli Mahmut
+\n
+Tanrının gölgesi unvanina sahip hükümdar kimdir?\n
+Tanrının gölgesi unvanina sahip hükümdar kimdir?\n
+A. Attila\n
+B. Mete Han\n
+C. Uluğ Bey\n
+D. Tonyukuk\n
+E. Gazneli Mahmut "
+            android:textColor="@color/white"
+            android:textSize="27sp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                style="@style/dogruSecenekHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:background="@drawable/bg_menu"
+                android:text="A" />
+
+            <Button
+                style="@style/yanlisSecenekHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:background="@drawable/bg_menu"
+                android:text="B" />
+
+            <Button
+                style="@style/seceneklerHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:background="@drawable/bg_menu"
+                android:text="C" />
+
+            <Button
+                style="@style/seceneklerHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:background="@drawable/bg_menu"
+                android:text="D" />
+
+            <Button
+                style="@style/seceneklerHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:background="@drawable/bg_menu"
+                android:text="E" />
+        </LinearLayout>
+
+        <include layout="@layout/post_setting" />
+    </LinearLayout>
+</ScrollView>
+

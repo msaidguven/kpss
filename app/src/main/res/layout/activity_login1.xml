@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#F6F6F6">
+
+            <FrameLayout
+                android:id="@+id/fm1"
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                android:background="@drawable/background_circle">
+
+                <ImageView
+                    android:id="@+id/tvtitle"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:layout_marginBottom="30dp"
+                    android:background="@drawable/lion"
+                    android:textColor="#000000"
+                    android:textSize="50sp"
+                    android:textStyle="bold"/>
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/fm2"
+                android:layout_width="50dp"
+                android:layout_height="100dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/background_circle1">
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/fm3"
+                android:layout_width="120dp"
+                android:layout_height="100dp"
+                android:layout_alignParentBottom="true"
+                android:background="@drawable/background_circle2">
+
+            </FrameLayout>
+
+            <EditText
+                android:id="@+id/txtLoginEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="E-Mail"
+                android:gravity="center"
+                android:background="@drawable/background_gradient2"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="20dp"
+                android:textCursorDrawable="@drawable/cursor_color"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="50dp"
+                android:inputType="textEmailAddress"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                android:textSize="15sp"
+                android:layout_below="@id/fm1"/>
+
+            <EditText
+                android:id="@+id/txtLoginPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Şifre"
+                android:layout_marginBottom="10dp"
+                android:layout_below="@+id/txtLoginEmail"
+                android:textCursorDrawable="@drawable/sky_blue_cursor_color"
+                android:inputType="textPassword"
+                android:gravity="center"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                android:textSize="15sp"
+                android:background="@drawable/background_gradient2"/>
+
+
+
+            <Button
+                android:id="@+id/btnLogin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Giriş Yap"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:layout_below="@id/txtLoginPassword"
+                android:textCursorDrawable="@drawable/sky_blue_cursor_color"
+                android:textColor="#FFFFFF"
+                android:textSize="15sp"
+                android:background="@drawable/background_gradient"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Trouble signing in?"
+                android:layout_below="@id/btnLogin"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="30dp"/>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_marginBottom="13.7dp"
+                    android:orientation="horizontal">
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="13.3sp"
+                        android:textColor="#aeaeae"
+                        android:gravity="center_horizontal"
+                        android:text="or"
+                        />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_marginBottom="35dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="26.7dp"
+                        android:layout_height="26.7dp"
+                        android:src="@drawable/fb"/>
+
+                    <ImageView
+                        android:layout_width="26.7dp"
+                        android:layout_height="26.7dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginLeft="20dp"
+                        android:src="@drawable/instagram"/>
+
+                    <ImageView
+                        android:layout_width="26.7dp"
+                        android:layout_height="26.7dp"
+                        android:layout_marginRight="20dp"
+                        android:src="@drawable/twitter"/>
+
+                    <ImageView
+                        android:layout_width="26.7dp"
+                        android:layout_height="26.7dp"
+                        android:src="@drawable/linkedin"/>
+
+                </LinearLayout>
+
+
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+<!--</ScrollView>-->

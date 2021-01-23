@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.Myapp" parent="Theme.MaterialComponents.Light">
+    </style>
+
+    <style name="textView" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/purple_700</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:textAlignment">center</item>
+        <item name="backgroundColor">@color/white</item>
+        <item name="android:padding">20dp</item>
+        <item name="android:layout_margin">0dp</item>
+    </style>
+
+    <style name="editText" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/purple_700</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:textAlignment">center</item>
+        <item name="backgroundColor">@color/white</item>
+        <item name="android:padding">20dp</item>
+        <item name="android:layout_margin">0dp</item>
+    </style>
+
+    <style name="button" parent="Theme.MaterialComponents.BottomSheetDialog">
+        <item name="android:textColor">@color/purple_700</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:textAlignment">center</item>
+        <item name="backgroundColor">@color/white</item>
+    </style>
+
+    <style name="toolbarTheme" parent="ThemeOverlay.MaterialComponents.MaterialCalendar.Fullscreen">
+
+    </style>
+
+    <style name="popopTheme" parent="ThemeOverlay.AppCompat.Light">
+    </style>
+
+    <style name="seceneklerVertical" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:layout_margin">10dp</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="backgroundTint">@color/white</item>
+    </style>
+
+    <style name="dogruSecenekVertical" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:layout_margin">10dp</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="backgroundTint">#15FA21</item>
+    </style>
+
+    <style name="yanlisSecenekVertical" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:layout_margin">10dp</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="backgroundTint">#F80D0D</item>
+    </style>
+
+    <style name="seceneklerHorizontal" parent="Theme.MaterialComponents.DayNight.Bridge">
+
+    </style>
+
+    <style name="dogruSecenekHorizontal" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:textSize">22sp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="backgroundTint">#15FA21</item>
+    </style>
+
+    <style name="yanlisSecenekHorizontal" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:textSize">22sp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="backgroundTint">#F80D0D</item>
+    </style>
+
+</resources>
