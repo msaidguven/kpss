@@ -85,12 +85,20 @@
         android:gravity="center_vertical"
         android:orientation="vertical">
 
-        <ListView
-            android:id="@+id/listViewDersler"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            tools:layout_editor_absoluteX="183dp"
+            tools:layout_editor_absoluteY="313dp" />
+        <!--
+                <ListView
+                    android:id="@+id/listViewDersler"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+                    -->
 
-        <!--include layout="@layout/menu"/>-->
+                <!--include layout="@layout/menu"/>-->
 
     </LinearLayout>
 </LinearLayout>

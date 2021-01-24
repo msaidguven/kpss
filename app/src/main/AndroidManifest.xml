@@ -17,6 +17,7 @@
         <activity android:name=".denemeActivity" />
         <activity android:name=".KonularActivity" />
         <activity android:name=".AddCategoryActivity" />
+        <activity android:name=".RecyclerActivity" />
         <activity android:name=".AddPost" />
         <activity
             android:name=".SettingsActivity"

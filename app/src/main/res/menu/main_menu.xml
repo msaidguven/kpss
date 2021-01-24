@@ -34,6 +34,11 @@
         android:icon="@drawable/icon_setting"
         android:title="@string/setting" />
 
+    <item
+        android:id="@+id/menu_recycler"
+        android:icon="@drawable/icon_setting"
+        android:title="Recycler" />
+
 
 
 </menu>

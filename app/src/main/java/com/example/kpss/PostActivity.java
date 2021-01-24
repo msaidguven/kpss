@@ -5,9 +5,12 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -30,11 +33,19 @@ import com.squareup.picasso.Picasso;
 import java.util.HashMap;
 
 public class PostActivity extends AppCompatActivity {
+
+    private Button click_A, click_B, click_C, click_D, click_E;
+    private ProgressBar progressA;
+    private TextView textView_dogru;
+    private TextView textView_yanlis;
+
     LinearLayout fragment_container_view_tag;
     ImageView ImageView_post_image;
     private FirebaseAuth mAuth;
     private FirebaseFirestore mFirestore;
     private Toolbar postToolbar;
+    private View post_setting;
+    int A,B,C,D,E;
     String d_cevap;
     String postID;
     String btn_getText;
@@ -51,11 +62,7 @@ public class PostActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
 
-        FragmentSonuc fragmentSonuc = new FragmentSonuc();
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction = transaction.add(R.id.fragment_container_view_tag, fragmentSonuc, "Fragment Sonucu");
-        transaction.commit();
+
 
         mAuth = FirebaseAuth.getInstance();
         mFirestore = FirebaseFirestore.getInstance();
@@ -65,7 +72,10 @@ public class PostActivity extends AppCompatActivity {
         konuID = intent.getStringExtra("konuID");
         getKonuName = intent.getStringExtra("konuName");
         getDersName = intent.getStringExtra("dersName");
-        userID = mAuth.getCurrentUser().getUid();
+
+        if (mAuth.getCurrentUser() != null) {
+            userID = mAuth.getCurrentUser().getUid();
+        }
 
         init();
 
@@ -84,7 +94,13 @@ public class PostActivity extends AppCompatActivity {
                                 postID = document.getId();
                                 post_image = document.getString("post_image");
                                 d_cevap = document.getString("d_cevap");
-                                //String post_image = task.getResult().getString("post_image");
+
+                                A = Integer.parseInt(document.get("A").toString());
+                                B = Integer.parseInt(document.get("B").toString());
+                                C = Integer.parseInt(document.get("C").toString());
+                                D = Integer.parseInt(document.get("D").toString());
+                                E = Integer.parseInt(document.get("E").toString());
+
                                 Picasso.get().load(post_image).into(ImageView_post_image);
                             }
                             if (task.getResult().size() == 0) {
@@ -101,6 +117,19 @@ public class PostActivity extends AppCompatActivity {
         ImageView_post_image = findViewById(R.id.ImageView_post_image);
         fragment_container_view_tag = findViewById(R.id.fragment_container_view_tag);
         postToolbar = findViewById(R.id.postToolbar);
+
+        post_setting = findViewById(R.id.post_setting);
+        textView_dogru = findViewById(R.id.textView_dogru);
+        textView_yanlis = findViewById(R.id.textView_yanlis);
+
+
+        click_A = findViewById(R.id.click_A);
+        click_B = findViewById(R.id.click_B);
+        click_C = findViewById(R.id.click_C);
+        click_D = findViewById(R.id.click_D);
+        click_E = findViewById(R.id.click_E);
+
+
 
         setSupportActionBar(postToolbar);
         getSupportActionBar().setTitle(getDersName);
@@ -131,17 +160,60 @@ public class PostActivity extends AppCompatActivity {
         btnD.setEnabled(false);
         btnE.setEnabled(false);
 
+
         if (btn_getText.equals(d_cevap)) {
             Toast.makeText(getApplicationContext(), "Tebrikler doğru cevap", Toast.LENGTH_SHORT).show();
             vee.setBackgroundColor(Color.GREEN);
+            textView_dogru.setText("Tebrikler doğru vecap verdiniz");
+            textView_dogru.setVisibility(View.VISIBLE);
             analizCevapIncrement = "dogru_sayisi";
         } else {
             Toast.makeText(getApplicationContext(), "Yanlış cevap", Toast.LENGTH_SHORT).show();
             vee.setBackgroundColor(Color.RED);
+            textView_yanlis.setText("Yanlış cevap verdiniz. Doğru cevap " + d_cevap + " olacak.");
+            textView_yanlis.setVisibility(View.VISIBLE);
             analizCevapIncrement = "yanlis_sayisi";
         }
 
-        if (mAuth.getCurrentUser() == null) {
+        int top = A+B+C+D+E;
+        if(top == 0){
+            top = 1;
+        }
+
+        click_A.setMinimumWidth( (100 * A) / top);
+        click_B.setMinimumWidth( (100 * B) / top);
+        click_C.setMinimumWidth( (100 * C) / top);
+        click_D.setMinimumWidth( (100 * D) / top);
+        click_E.setMinimumWidth( (100 * E) / top);
+
+
+        click_A.setText(String.valueOf(A));
+        click_B.setText(String.valueOf(B));
+        click_C.setText(String.valueOf(C));
+        click_D.setText(String.valueOf(D));
+        click_E.setText(String.valueOf(E));
+
+        ViewGroup.LayoutParams paramsA = click_A.getLayoutParams();
+        ViewGroup.LayoutParams paramsB = click_B.getLayoutParams();
+        ViewGroup.LayoutParams paramsC = click_C.getLayoutParams();
+        ViewGroup.LayoutParams paramsD = click_D.getLayoutParams();
+        ViewGroup.LayoutParams paramsE = click_E.getLayoutParams();
+
+        paramsA.width = ( (1000 * A) / top);
+        paramsB.width = ( (1000 * B) / top);
+        paramsC.width = ( (1000 * C) / top);
+        paramsD.width = ( (1000 * D) / top);
+        paramsE.width = ( (1000 * E) / top);
+
+        post_setting.setVisibility(View.VISIBLE);
+
+        FragmentSonuc fragmentSonuc = new FragmentSonuc();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction = transaction.add(R.id.fragment_container_view_tag, fragmentSonuc, "Fragment Sonucu");
+        transaction.commit();
+
+        if (mAuth.getCurrentUser() != null) {
 
             HashMap<String, Object> postAnaliz = new HashMap<>();
             postAnaliz.put("postID", postID);
@@ -151,7 +223,6 @@ public class PostActivity extends AppCompatActivity {
             String uyeSoruAnaliz_docName = userID + postID;
             DocumentReference uyeSoruAnaliz = mFirestore.collection("uyeSoruAnaliz").document(uyeSoruAnaliz_docName);
             uyeSoruAnaliz.set(postAnaliz, SetOptions.merge());
-
 
             HashMap<String, Object> konuAnaliz = new HashMap<>();
             konuAnaliz.put("konuID", konuID);

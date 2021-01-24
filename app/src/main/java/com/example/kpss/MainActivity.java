@@ -5,11 +5,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,7 +13,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -29,9 +26,13 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+
+    private ArrayList<MenuAnaliz> dersler;
+    private RecyclerView recyclerView;
+    private RecyclerMenuAdapter recyclerMenuAdapter;
+    private RecyclerMenuAdapter.RecyclerViewClickListener clickListener;
 
     private FirebaseAuth mAuth;
     private TextView textView_userName;
@@ -49,13 +50,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        tanimla();
-
-        mAuth = FirebaseAuth.getInstance();
-        mFirestore = FirebaseFirestore.getInstance();
-
-        listView();
-
+        init();
+        recycler();
 
         if (mAuth.getCurrentUser() == null) {
             //Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
@@ -98,19 +94,20 @@ public class MainActivity extends AppCompatActivity {
             btnRegister.setVisibility(View.GONE);
         }
 
-        //buton_olustur();
-
-
     }
 
 
-    private void tanimla() {
+    private void init() {
+
+        mAuth = FirebaseAuth.getInstance();
+        mFirestore = FirebaseFirestore.getInstance();
+
+
         textView_userName = findViewById(R.id.textView_userName);
         btnLogin = findViewById(R.id.btnLogin);
         btnRegister = findViewById(R.id.btnRegister);
         imageView = findViewById(R.id.imageView);
         mToolbar = findViewById(R.id.mainToolbar);
-        liste = findViewById(R.id.listViewDersler);
 
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("Sorularla KPSS");
@@ -147,6 +144,11 @@ public class MainActivity extends AppCompatActivity {
             startActivity(settingsIntent);
         }
 
+        if (item.getItemId() == R.id.menu_recycler) {
+            Intent recyclerActivity = new Intent(MainActivity.this, RecyclerActivity.class);
+            startActivity(recyclerActivity);
+        }
+
         if (item.getItemId() == R.id.menu_addCategory) {
             Intent settingsIntent = new Intent(MainActivity.this, AddCategoryActivity.class);
             startActivity(settingsIntent);
@@ -154,55 +156,16 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    private void buton_olustur() {
-        LinearLayout linearLayout = findViewById(R.id.linearLayout_menuler); //a constraint layout pre-made in design view
-        linearLayout.setOrientation(LinearLayout.VERTICAL);
-        mFirestore.collection("Menuler").whereEqualTo("dersID", "0").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    List<String> ders = new ArrayList<>();
-                    List<String> ders_id = new ArrayList<>();
-                    ders_id.add("");
-                    ders.add("Ders Seçin");
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        ders_id.add(document.getId());
-                        ders.add(document.getString("menu"));
-                        int buttonStyle = R.style.button;
-                        //int buttonStyle = R.style.Widget_AppCompat_Light_ActionButton;
 
-                        Button btn = new Button(MainActivity.this);
+    private void recycler() {
 
-                        //btn.setBackgroundResource(R.drawable.common_google_signin_btn_text_dark_normal);
-                        btn.setBackgroundResource(R.drawable.bg_menu2);
-                        btn.setPadding(5, 10, 5, 15);
-                        btn.setText(document.getString("menu"));
-                        btn.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT));
-                        btn.setId(View.generateViewId());
-                        btn.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent konularActivity = new Intent(MainActivity.this, KonularActivity.class);
-                                konularActivity.putExtra("dersID", document.getId());
-                                konularActivity.putExtra("dersName", document.getString("menu"));
-                                finish();
-                                startActivity(konularActivity);
-                                //Toast.makeText(getApplicationContext(), String.valueOf(btn.getId()), Toast.LENGTH_LONG).show();
-                            }
-                        });
-                        linearLayout.addView(btn);
-                    }
-                }
-            }
-        });
-    }
+        recyclerView = findViewById(R.id.recycler_view);
+        dersler = new ArrayList<>();
+        setOnClickListener();
+        recyclerMenuAdapter = new RecyclerMenuAdapter(dersler, clickListener);
+        recyclerView.setAdapter(recyclerMenuAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-    private void listView() {
-
-        List<ListViewMenu> menuler = new ArrayList<ListViewMenu>();
-        List<String> dersName = new ArrayList<String>();
-        List<String> ders_id = new ArrayList<>();
-        ;
         mFirestore.collection("Menuler")
                 .whereEqualTo("dersID", "0")
                 .get()
@@ -211,51 +174,30 @@ public class MainActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-
-                                String name = document.get("menu").toString();
-                                String ss = document.get("soru_sayisi").toString();
-
-                                ders_id.add(document.getId());
-                                dersName.add(name + " " + ss);
-
                                 String menuID = document.getId();
                                 String menuName = document.getString("menu");
-                                int menuSoruSayisi = 2;
-                                int uyeninDogruCevapSayisi = 0;
-                                int uyeninYanlisCevapSayisi = 0;
-                                menuler.add(new ListViewMenu(menuID, menuName, menuSoruSayisi, uyeninDogruCevapSayisi, uyeninYanlisCevapSayisi));
-                                ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, android.R.id.text1, dersName);
-                                liste.setAdapter(adapter);
-                                liste.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                    @Override
-                                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                        Intent konularActivity = new Intent(MainActivity.this, KonularActivity.class);
-                                        konularActivity.putExtra("dersID", ders_id.get(position));
-                                        konularActivity.putExtra("dersName", dersName.get(position));
-                                        startActivity(konularActivity);
-                                    }
-                                });
-/*
-                        OzelAdaptor menuAdaptor = new OzelAdaptor(MainActivity.this, menuler);
-                        liste.setAdapter(menuAdaptor);
-                        liste.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                String menu_id = menuler.get(position).getMenuID();
-                                String menu_name = menuler.get(position).getMenuName();
-                                Toast.makeText(getApplicationContext(), menu_id, Toast.LENGTH_SHORT).show();
-                                Intent konularActivity = new Intent(MainActivity.this, KonularActivity.class);
-                                konularActivity.putExtra("dersID", menu_id);
-                                konularActivity.putExtra("dersName", menu_name);
-                                startActivity(konularActivity);
+                                int menuSoruSayisi = Integer.parseInt(document.get("soru_sayisi").toString());
+                                dersler.add(new MenuAnaliz(menuID, menuName, menuSoruSayisi));
+
                             }
-                        });
-                         */
-                            }
+                            recyclerMenuAdapter.notifyDataSetChanged();
                         }
                     }
                 });
     }
+
+    private void setOnClickListener(){
+        clickListener = new RecyclerMenuAdapter.RecyclerViewClickListener() {
+            @Override
+            public void onClick(View v, int position) {
+                Intent konularActivity = new Intent(MainActivity.this, KonularActivity.class);
+                konularActivity.putExtra("dersID", dersler.get(position).getDersID());
+                konularActivity.putExtra("dersName", dersler.get(position).getDersName());
+                startActivity(konularActivity);
+            }
+        };
+    }
+
 
 }
 

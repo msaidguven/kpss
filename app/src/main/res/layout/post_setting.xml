@@ -2,46 +2,175 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:orientation="horizontal"
+    android:layout_height="match_parent"
     android:layout_gravity="bottom"
     android:gravity="bottom"
-    android:background="#544567"
-    android:layout_height="match_parent">
+    android:orientation="vertical">
 
-    <ImageView
-        android:layout_margin="5dp"
-        android:padding="15dp"
-        android:src="@drawable/icon_star"
-        android:layout_width="70dp"
-        android:layout_height="70dp"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="3dp"/>
 
-    <ImageView
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/textView_dogru"
+        android:padding="5dp"
         android:layout_margin="5dp"
-        android:padding="15dp"
-        android:src="@drawable/icon_eye"
-        android:layout_width="70dp"
-        android:layout_height="70dp"/>
+        android:textColor="#09E815"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
-    <ImageView
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/textView_yanlis"
+        android:padding="5dp"
         android:layout_margin="5dp"
-        android:padding="15dp"
-        android:src="@drawable/icon_comment"
-        android:layout_width="70dp"
-        android:layout_height="70dp"/>
+        android:textColor="#F60505"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
-    <ImageView
-        android:layout_margin="5dp"
-        android:padding="15dp"
-        android:src="@drawable/icon_share"
-        android:layout_width="70dp"
-        android:layout_height="70dp"/>
+    <LinearLayout
+        android:id="@+id/linearLayout_postSetting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:gravity="bottom"
+        android:orientation="vertical">
 
-    <ImageView
-        android:layout_margin="5dp"
-        android:padding="15dp"
-        android:src="@drawable/icon_setting"
-        android:layout_width="70dp"
-        android:layout_height="70dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:gravity="bottom"
+            android:orientation="horizontal">
+
+            <Button
+                android:layout_marginHorizontal="10dp"
+                android:enabled="false"
+                android:text="A"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <Button
+                android:layout_marginHorizontal="10dp"
+                android:enabled="false"
+                android:backgroundTint="#FF0303"
+                android:id="@+id/click_A"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:gravity="bottom"
+            android:orientation="horizontal">
+
+            <Button
+                android:layout_marginHorizontal="10dp"
+                android:enabled="false"
+                android:text="B"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <Button
+                android:layout_marginHorizontal="10dp"
+                android:enabled="false"
+                android:backgroundTint="#FF0303"
+                android:id="@+id/click_B"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:gravity="bottom"
+            android:orientation="horizontal">
+
+            <Button
+                android:layout_marginHorizontal="10dp"
+                android:enabled="false"
+                android:text="C"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <Button
+                android:layout_marginHorizontal="10dp"
+                android:enabled="false"
+                android:backgroundTint="#FF0303"
+                android:id="@+id/click_C"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:gravity="bottom"
+            android:orientation="horizontal">
+
+            <Button
+                android:layout_marginHorizontal="10dp"
+                android:enabled="false"
+                android:text="D"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <Button
+                android:layout_marginHorizontal="10dp"
+                android:enabled="false"
+                android:backgroundTint="#FF0303"
+                android:id="@+id/click_D"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:gravity="bottom"
+            android:orientation="horizontal">
+
+            <Button
+                android:layout_marginHorizontal="10dp"
+                android:enabled="false"
+                android:text="E"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <Button
+                android:layout_marginHorizontal="10dp"
+                android:enabled="false"
+                android:backgroundTint="#FF0303"
+                android:id="@+id/click_E"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+
+
+    <Button
+        android:layout_margin="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:gravity="center"
+        android:text="Sonraki Soru"/>
+
 
 
 </LinearLayout>
