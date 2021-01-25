@@ -109,6 +109,15 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/linearLayout_postSetting" />
 
+                <Button
+                    android:layout_margin="10dp"
+                    android:padding="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:gravity="center"
+                    android:text="Sonraki Soru"/>
+
                 <include
                     android:id="@+id/post_setting"
                     layout="@layout/post_setting"
@@ -118,7 +127,13 @@
                     app:layout_constraintTop_toBottomOf="@+id/include2" />
 
             </LinearLayout>
+
+
+
+
         </LinearLayout>
+
+
 
     </ScrollView>
 

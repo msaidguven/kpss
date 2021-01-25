@@ -202,7 +202,7 @@ public class AddPost extends AppCompatActivity {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     List<String> ders = new ArrayList<>();
-                    List<String> ders_id = new ArrayList<>();
+                    final List<String> ders_id = new ArrayList<>();
 
                     ders_id.add("");
                     ders.add("Ders Seçin");
@@ -253,8 +253,8 @@ public class AddPost extends AppCompatActivity {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     List<String> konu = new ArrayList<>();
-                    List<String> konu_id = new ArrayList<>();
-                    List<String> konu_soru_sayisi = new ArrayList<>();
+                    final List<String> konu_id = new ArrayList<>();
+                    final List<String> konu_soru_sayisi = new ArrayList<>();
 
                     konu_id.add("");
                     konu.add("Konu Seçin");

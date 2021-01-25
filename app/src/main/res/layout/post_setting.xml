@@ -1,33 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="bottom"
     android:gravity="bottom"
     android:orientation="vertical">
 
+
+    <TextView
+        android:id="@+id/textView_dogru"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:padding="5dp"
+        android:textColor="#09E815"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/textView_yanlis"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:padding="5dp"
+        android:textColor="#F60505"
+        android:visibility="gone" />
+
     <View
         android:layout_width="match_parent"
-        android:layout_height="3dp"/>
+        android:layout_height="1dp"
+        android:background="@android:color/black" />
 
     <TextView
-        android:visibility="gone"
-        android:id="@+id/textView_dogru"
-        android:padding="5dp"
-        android:layout_margin="5dp"
-        android:textColor="#09E815"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:padding="5dp"
+        android:text="Bu soruya verilen cevaplar"
+        android:textAlignment="center"
+        android:textColor="#037DFF" />
 
-    <TextView
-        android:visibility="gone"
-        android:id="@+id/textView_yanlis"
-        android:padding="5dp"
-        android:layout_margin="5dp"
-        android:textColor="#F60505"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
 
     <LinearLayout
         android:id="@+id/linearLayout_postSetting"
@@ -45,19 +56,19 @@
             android:orientation="horizontal">
 
             <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
                 android:enabled="false"
-                android:text="A"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:text="A" />
 
             <Button
-                android:layout_marginHorizontal="10dp"
-                android:enabled="false"
-                android:backgroundTint="#FF0303"
                 android:id="@+id/click_A"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:backgroundTint="#FF0303"
+                android:enabled="false" />
 
         </LinearLayout>
 
@@ -69,19 +80,19 @@
             android:orientation="horizontal">
 
             <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
                 android:enabled="false"
-                android:text="B"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:text="B" />
 
             <Button
-                android:layout_marginHorizontal="10dp"
-                android:enabled="false"
-                android:backgroundTint="#FF0303"
                 android:id="@+id/click_B"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:backgroundTint="#FF0303"
+                android:enabled="false" />
 
         </LinearLayout>
 
@@ -93,19 +104,19 @@
             android:orientation="horizontal">
 
             <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
                 android:enabled="false"
-                android:text="C"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:text="C" />
 
             <Button
-                android:layout_marginHorizontal="10dp"
-                android:enabled="false"
-                android:backgroundTint="#FF0303"
                 android:id="@+id/click_C"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:backgroundTint="#FF0303"
+                android:enabled="false" />
 
         </LinearLayout>
 
@@ -117,19 +128,19 @@
             android:orientation="horizontal">
 
             <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
                 android:enabled="false"
-                android:text="D"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:text="D" />
 
             <Button
-                android:layout_marginHorizontal="10dp"
-                android:enabled="false"
-                android:backgroundTint="#FF0303"
                 android:id="@+id/click_D"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:backgroundTint="#FF0303"
+                android:enabled="false" />
 
         </LinearLayout>
 
@@ -141,36 +152,178 @@
             android:orientation="horizontal">
 
             <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
                 android:enabled="false"
-                android:text="E"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:text="E" />
 
             <Button
-                android:layout_marginHorizontal="10dp"
-                android:enabled="false"
-                android:backgroundTint="#FF0303"
                 android:id="@+id/click_E"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:backgroundTint="#FF0303"
+                android:enabled="false" />
 
         </LinearLayout>
-
 
 
     </LinearLayout>
 
-
-
-    <Button
-        android:layout_margin="10dp"
+    <LinearLayout
+        android:id="@+id/linearLayout_uyeSoruAnaliz"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:gravity="center"
-        android:text="Sonraki Soru"/>
+        android:gravity="bottom"
+        android:orientation="vertical"
+        android:visibility="gone">
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/black" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:padding="5dp"
+            android:text="Bu soruya verdiğin cevapların"
+            android:textAlignment="center"
+            android:textColor="#037DFF" />
+
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:gravity="bottom"
+            android:orientation="horizontal">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:enabled="false"
+                android:text="A" />
+
+            <Button
+                android:id="@+id/userCevap_A"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:backgroundTint="#FF0303"
+                android:enabled="false" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:gravity="bottom"
+            android:orientation="horizontal">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:enabled="false"
+                android:text="B" />
+
+            <Button
+                android:id="@+id/userCevap_B"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:backgroundTint="#FF0303"
+                android:enabled="false" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:gravity="bottom"
+            android:orientation="horizontal">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:enabled="false"
+                android:text="C" />
+
+            <Button
+                android:id="@+id/userCevap_C"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:backgroundTint="#FF0303"
+                android:enabled="false" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:gravity="bottom"
+            android:orientation="horizontal">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:enabled="false"
+                android:text="D" />
+
+            <Button
+                android:id="@+id/userCevap_D"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:backgroundTint="#FF0303"
+                android:enabled="false" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:gravity="bottom"
+            android:orientation="horizontal">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:enabled="false"
+                android:text="E" />
+
+            <Button
+                android:id="@+id/userCevap_E"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:backgroundTint="#FF0303"
+                android:enabled="false" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/black" />
 
 
 </LinearLayout>

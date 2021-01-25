@@ -205,7 +205,7 @@ public class AddCategoryActivity extends AppCompatActivity {
     }
 
     public void fireSoreKaydet(String koleksiyon, String parent) {
-        for (String addUnit : egitimBilimleri) {
+        for (final String addUnit : egitimBilimleri) {
             HashMap<String, Object> userMap = new HashMap<>();
             userMap.put("dersID", parent);
             userMap.put("siralama", (i + 1));
@@ -224,7 +224,7 @@ public class AddCategoryActivity extends AppCompatActivity {
     }
 
     public void fireSoreGuncelle(String koleksiyon, String belge) {
-        String unite = tarih[i];
+        final String unite = tarih[i];
         HashMap<String, Object> userUpdateMap = new HashMap<>();
         for (String addUnit : tarih) {
             userUpdateMap.put("unite:" + (i + 1), addUnit);

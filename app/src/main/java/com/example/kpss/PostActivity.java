@@ -23,6 +23,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -34,18 +35,21 @@ import java.util.HashMap;
 
 public class PostActivity extends AppCompatActivity {
 
+
+    LinearLayout linearLayout_uyeSoruAnaliz;
+
     private Button click_A, click_B, click_C, click_D, click_E;
+    private Button userCevap_A, userCevap_B, userCevap_C, userCevap_D, userCevap_E;
     private ProgressBar progressA;
     private TextView textView_dogru;
     private TextView textView_yanlis;
-
     LinearLayout fragment_container_view_tag;
     ImageView ImageView_post_image;
     private FirebaseAuth mAuth;
     private FirebaseFirestore mFirestore;
     private Toolbar postToolbar;
     private View post_setting;
-    int A,B,C,D,E;
+    int A, B, C, D, E;
     String d_cevap;
     String postID;
     String btn_getText;
@@ -56,12 +60,12 @@ public class PostActivity extends AppCompatActivity {
     String userID;
     String post_image;
     String analizCevapIncrement;
+    String time;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
-
 
 
         mAuth = FirebaseAuth.getInstance();
@@ -77,9 +81,6 @@ public class PostActivity extends AppCompatActivity {
             userID = mAuth.getCurrentUser().getUid();
         }
 
-        init();
-
-
         mFirestore.collection("Posts")
                 .whereEqualTo("konuID", konuID)
                 .orderBy("postUnic_autoIncrement")
@@ -94,13 +95,11 @@ public class PostActivity extends AppCompatActivity {
                                 postID = document.getId();
                                 post_image = document.getString("post_image");
                                 d_cevap = document.getString("d_cevap");
-
                                 A = Integer.parseInt(document.get("A").toString());
                                 B = Integer.parseInt(document.get("B").toString());
                                 C = Integer.parseInt(document.get("C").toString());
                                 D = Integer.parseInt(document.get("D").toString());
                                 E = Integer.parseInt(document.get("E").toString());
-
                                 Picasso.get().load(post_image).into(ImageView_post_image);
                             }
                             if (task.getResult().size() == 0) {
@@ -111,6 +110,9 @@ public class PostActivity extends AppCompatActivity {
                         }
                     }
                 });
+
+        init();
+
     }
 
     private void init() {
@@ -129,7 +131,12 @@ public class PostActivity extends AppCompatActivity {
         click_D = findViewById(R.id.click_D);
         click_E = findViewById(R.id.click_E);
 
-
+        userCevap_A = findViewById(R.id.userCevap_A);
+        userCevap_B = findViewById(R.id.userCevap_B);
+        userCevap_C = findViewById(R.id.userCevap_C);
+        userCevap_D = findViewById(R.id.userCevap_D);
+        userCevap_E = findViewById(R.id.userCevap_E);
+        linearLayout_uyeSoruAnaliz = findViewById(R.id.linearLayout_uyeSoruAnaliz);
 
         setSupportActionBar(postToolbar);
         getSupportActionBar().setTitle(getDersName);
@@ -147,6 +154,7 @@ public class PostActivity extends AppCompatActivity {
     public void secenekClick(View v) {
         Button vee = (Button) v;
         btn_getText = vee.getText().toString();
+
 
         Button btnA = findViewById(R.id.secenkA);
         Button btnB = findViewById(R.id.secenkB);
@@ -175,45 +183,9 @@ public class PostActivity extends AppCompatActivity {
             analizCevapIncrement = "yanlis_sayisi";
         }
 
-        int top = A+B+C+D+E;
-        if(top == 0){
-            top = 1;
-        }
-
-        click_A.setMinimumWidth( (100 * A) / top);
-        click_B.setMinimumWidth( (100 * B) / top);
-        click_C.setMinimumWidth( (100 * C) / top);
-        click_D.setMinimumWidth( (100 * D) / top);
-        click_E.setMinimumWidth( (100 * E) / top);
-
-
-        click_A.setText(String.valueOf(A));
-        click_B.setText(String.valueOf(B));
-        click_C.setText(String.valueOf(C));
-        click_D.setText(String.valueOf(D));
-        click_E.setText(String.valueOf(E));
-
-        ViewGroup.LayoutParams paramsA = click_A.getLayoutParams();
-        ViewGroup.LayoutParams paramsB = click_B.getLayoutParams();
-        ViewGroup.LayoutParams paramsC = click_C.getLayoutParams();
-        ViewGroup.LayoutParams paramsD = click_D.getLayoutParams();
-        ViewGroup.LayoutParams paramsE = click_E.getLayoutParams();
-
-        paramsA.width = ( (1000 * A) / top);
-        paramsB.width = ( (1000 * B) / top);
-        paramsC.width = ( (1000 * C) / top);
-        paramsD.width = ( (1000 * D) / top);
-        paramsE.width = ( (1000 * E) / top);
-
-        post_setting.setVisibility(View.VISIBLE);
-
-        FragmentSonuc fragmentSonuc = new FragmentSonuc();
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction = transaction.add(R.id.fragment_container_view_tag, fragmentSonuc, "Fragment Sonucu");
-        transaction.commit();
 
         if (mAuth.getCurrentUser() != null) {
+
 
             HashMap<String, Object> postAnaliz = new HashMap<>();
             postAnaliz.put("postID", postID);
@@ -245,7 +217,75 @@ public class PostActivity extends AppCompatActivity {
             DocumentReference postCevap_increment = mFirestore.collection("Posts").document(postID);
             postCevap_increment.update(btn_getText, FieldValue.increment(1));
 
+            //UyeSoruAnaliz uyeninCevaplari = new UyeSoruAnaliz(uyeSoruAnaliz_docName);
+
+
+            mFirestore.collection("uyeSoruAnaliz").document(uyeSoruAnaliz_docName).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+
+                        DocumentSnapshot document = task.getResult();
+                        A =  document.get("A") == null ? 0 : Integer.parseInt(task.getResult().get("A").toString()) ;
+                        B =  document.get("B") == null ? 0 : Integer.parseInt(task.getResult().get("B").toString()) ;
+                        C =  document.get("C") == null ? 0 : Integer.parseInt(task.getResult().get("C").toString()) ;
+                        D =  document.get("D") == null ? 0 : Integer.parseInt(task.getResult().get("D").toString()) ;
+                        E =  document.get("E") == null ? 0 : Integer.parseInt(task.getResult().get("E").toString()) ;
+
+                        linearLayout_uyeSoruAnaliz.setVisibility(View.VISIBLE);
+
+                        int toplam = A + B + C + D + E;
+                        if (toplam == 0) {
+                            toplam = 1;
+                        }
+                        userCevap_A.setText(String.valueOf(A));
+                        userCevap_B.setText(String.valueOf(B));
+                        userCevap_C.setText(String.valueOf(C));
+                        userCevap_D.setText(String.valueOf(D));
+                        userCevap_E.setText(String.valueOf(E));
+
+                        ViewGroup.LayoutParams paramsA = userCevap_A.getLayoutParams();
+                        ViewGroup.LayoutParams paramsB = userCevap_B.getLayoutParams();
+                        ViewGroup.LayoutParams paramsC = userCevap_C.getLayoutParams();
+                        ViewGroup.LayoutParams paramsD = userCevap_D.getLayoutParams();
+                        ViewGroup.LayoutParams paramsE = userCevap_E.getLayoutParams();
+
+                        paramsA.width = ((1000 * A) / toplam);
+                        paramsB.width = ((1000 * B) / toplam);
+                        paramsC.width = ((1000 * C) / toplam);
+                        paramsD.width = ((1000 * D) / toplam);
+                        paramsE.width = ((1000 * E) / toplam);
+
+                    }
+                }
+            });
+
         }
+
+        int top = A + B + C + D + E;
+        if (top == 0) {
+            top = 1;
+        }
+
+        click_A.setText(String.valueOf(A));
+        click_B.setText(String.valueOf(B));
+        click_C.setText(String.valueOf(C));
+        click_D.setText(String.valueOf(D));
+        click_E.setText(String.valueOf(E));
+
+        ViewGroup.LayoutParams paramsA = click_A.getLayoutParams();
+        ViewGroup.LayoutParams paramsB = click_B.getLayoutParams();
+        ViewGroup.LayoutParams paramsC = click_C.getLayoutParams();
+        ViewGroup.LayoutParams paramsD = click_D.getLayoutParams();
+        ViewGroup.LayoutParams paramsE = click_E.getLayoutParams();
+
+        paramsA.width = ((1000 * A) / top);
+        paramsB.width = ((1000 * B) / top);
+        paramsC.width = ((1000 * C) / top);
+        paramsD.width = ((1000 * D) / top);
+        paramsE.width = ((1000 * E) / top);
+
+        post_setting.setVisibility(View.VISIBLE);
 
     }
 }

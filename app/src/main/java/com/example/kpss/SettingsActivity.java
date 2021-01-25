@@ -58,16 +58,6 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-
-
-
-
-
-
-
-
-
-
         mToolbar = findViewById(R.id.settingsToolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("Settings Activity");
