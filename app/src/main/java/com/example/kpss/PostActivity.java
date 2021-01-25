@@ -3,6 +3,7 @@ package com.example.kpss;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
@@ -24,8 +26,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
@@ -37,6 +41,7 @@ public class PostActivity extends AppCompatActivity {
 
 
     LinearLayout linearLayout_uyeSoruAnaliz;
+    private TextView realTime;
 
     private Button click_A, click_B, click_C, click_D, click_E;
     private Button userCevap_A, userCevap_B, userCevap_C, userCevap_D, userCevap_E;
@@ -81,6 +86,8 @@ public class PostActivity extends AppCompatActivity {
             userID = mAuth.getCurrentUser().getUid();
         }
 
+
+
         mFirestore.collection("Posts")
                 .whereEqualTo("konuID", konuID)
                 .orderBy("postUnic_autoIncrement")
@@ -113,6 +120,25 @@ public class PostActivity extends AppCompatActivity {
 
         init();
 
+        final DocumentReference docRef = mFirestore.collection("Posts").document("7sCC4lzDc4kAHvF3TYlZ");
+        docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot snapshot,
+                                @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
+                }
+
+                if (snapshot != null && snapshot.exists()) {
+                    //Log.d(TAG, "Current data: " + snapshot.getData());
+                    D = Integer.parseInt(snapshot.get("D").toString());
+                    realTime.setText(String.valueOf(D));
+                } else {
+                    Toast.makeText(getApplicationContext(), "Current data: null", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
     }
 
     private void init() {
@@ -123,6 +149,7 @@ public class PostActivity extends AppCompatActivity {
         post_setting = findViewById(R.id.post_setting);
         textView_dogru = findViewById(R.id.textView_dogru);
         textView_yanlis = findViewById(R.id.textView_yanlis);
+        realTime = findViewById(R.id.realTime);
 
 
         click_A = findViewById(R.id.click_A);
