@@ -53,4 +53,7 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.71828' //picasso resim indirme
 
     implementation 'me.srodrigo:androidhintspinner:1.0.0'  //spinner ipucu
+
+    //implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0' //grafik kütüphanesi
+
 }

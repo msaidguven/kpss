@@ -6,6 +6,31 @@
     android:gravity="bottom"
     android:orientation="vertical">
 
+    <RelativeLayout
+        android:id="@+id/relativeLayout_postSetting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:gravity="bottom"
+        android:orientation="vertical">
+
+
+
+        <SeekBar
+            android:id="@+id/seekBar1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_marginBottom="35dp"
+            android:layout_marginRight="5dp"
+            android:max="25"
+            android:paddingBottom="12dp" />
+
+
+
+    </RelativeLayout>
+
+
 
     <TextView
         android:id="@+id/textView_dogru"
@@ -47,6 +72,9 @@
         android:layout_gravity="bottom"
         android:gravity="bottom"
         android:orientation="vertical">
+
+
+
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -59,6 +59,7 @@ public class AddPost extends AppCompatActivity {
     private String konuID;
     private String dersID;
     private int konu_soru_sayisi_int;
+    private int postUnic_autoIncrement_int;
     String user_id;
     String newImageUri;
 
@@ -127,6 +128,7 @@ public class AddPost extends AppCompatActivity {
         user_id = mAuth.getCurrentUser().getUid();
         HashMap<String, Object> userMap = new HashMap<>();
         userMap.put("konuID", konuID);
+        userMap.put("dersID", dersID);
         userMap.put("d_cevap", dCevap);
         userMap.put("post_image", newImageUri);
         userMap.put("userID", user_id);
@@ -136,7 +138,8 @@ public class AddPost extends AppCompatActivity {
         userMap.put("D", 0);
         userMap.put("E", 0);
         //userMap.put("unique", System.currentTimeMillis());
-        userMap.put("postUnic_autoIncrement", konu_soru_sayisi_int+1);
+        userMap.put("postUnic_autoIncrement", postUnic_autoIncrement_int+1);
+        //userMap.put("postUnic_autoIncrement", FieldValue.increment(1));
         userMap.put("time", FieldValue.serverTimestamp());
         mFirestore.collection("Posts").document().set(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -255,10 +258,12 @@ public class AddPost extends AppCompatActivity {
                     List<String> konu = new ArrayList<>();
                     final List<String> konu_id = new ArrayList<>();
                     final List<String> konu_soru_sayisi = new ArrayList<>();
+                    final List<String> postUnic_autoIncrement = new ArrayList<>();
 
                     konu_id.add("");
                     konu.add("Konu Seçin");
                     konu_soru_sayisi.add("");
+                    postUnic_autoIncrement.add("");
 
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         konu.add(document.getString("menu"));
@@ -268,6 +273,12 @@ public class AddPost extends AppCompatActivity {
                             konu_soru_sayisi.add(String.valueOf(document.get("soru_sayisi")));
                         }else{
                             konu_soru_sayisi.add("0");
+                        }
+
+                        if(document.get("postUnic_autoIncrement") != null){
+                            postUnic_autoIncrement.add(String.valueOf(document.get("postUnic_autoIncrement")));
+                        }else{
+                            postUnic_autoIncrement.add("0");
                         }
                     }
                     ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, konu);
@@ -282,6 +293,7 @@ public class AddPost extends AppCompatActivity {
                             if (spinner_konu.getSelectedItemPosition() != 0) {
                                 konuID = konu_id.get(spinner_konu.getSelectedItemPosition());
                                 konu_soru_sayisi_int = Integer.parseInt(konu_soru_sayisi.get(spinner_konu.getSelectedItemPosition()));
+                                postUnic_autoIncrement_int = Integer.parseInt(postUnic_autoIncrement.get(spinner_konu.getSelectedItemPosition()));
                                 Toast.makeText(getApplicationContext(), konuID, Toast.LENGTH_SHORT).show();
                                 konu_Ischeck = true;
                             } else {

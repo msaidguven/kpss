@@ -37,6 +37,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 
+
 public class PostActivity extends AppCompatActivity {
 
 
@@ -82,12 +83,13 @@ public class PostActivity extends AppCompatActivity {
         getKonuName = intent.getStringExtra("konuName");
         getDersName = intent.getStringExtra("dersName");
 
+        init();
+
         if (mAuth.getCurrentUser() != null) {
             userID = mAuth.getCurrentUser().getUid();
         }
 
-
-
+/*
         mFirestore.collection("Posts")
                 .whereEqualTo("konuID", konuID)
                 .orderBy("postUnic_autoIncrement")
@@ -117,28 +119,67 @@ public class PostActivity extends AppCompatActivity {
                         }
                     }
                 });
+*/
 
-        init();
+        mFirestore.collection("Posts")
+                .whereEqualTo("konuID", konuID)
+                .orderBy("postUnic_autoIncrement")
+                .startAt(1)
+                .limit(1)
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value,
+                                        @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
+                        }
 
-        final DocumentReference docRef = mFirestore.collection("Posts").document("7sCC4lzDc4kAHvF3TYlZ");
-        docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot snapshot,
-                                @Nullable FirebaseFirestoreException e) {
-                if (e != null) {
-                    Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
-                }
 
-                if (snapshot != null && snapshot.exists()) {
-                    //Log.d(TAG, "Current data: " + snapshot.getData());
-                    D = Integer.parseInt(snapshot.get("D").toString());
-                    realTime.setText(String.valueOf(D));
-                } else {
-                    Toast.makeText(getApplicationContext(), "Current data: null", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+                        for (QueryDocumentSnapshot doc : value) {
 
+                            if (doc.getData().size() == 0) {
+                                Toast.makeText(getApplicationContext(), "Soru Bulunamadı", Toast.LENGTH_SHORT).show();
+                            } else {
+
+                                postID = doc.getId();
+                                post_image = doc.getString("post_image");
+                                d_cevap = doc.getString("d_cevap");
+                                A = Integer.parseInt(doc.get("A").toString());
+                                B = Integer.parseInt(doc.get("B").toString());
+                                C = Integer.parseInt(doc.get("C").toString());
+                                D = Integer.parseInt(doc.get("D").toString());
+                                E = Integer.parseInt(doc.get("E").toString());
+                                Picasso.get().load(post_image).into(ImageView_post_image);
+
+                                //realTime.setText(String.valueOf(D));
+
+                                int top = A + B + C + D + E;
+                                if (top == 0) {
+                                    top = 1;
+                                }
+
+                                click_A.setText(String.valueOf(A));
+                                click_B.setText(String.valueOf(B));
+                                click_C.setText(String.valueOf(C));
+                                click_D.setText(String.valueOf(D));
+                                click_E.setText(String.valueOf(E));
+
+                                ViewGroup.LayoutParams paramsA = click_A.getLayoutParams();
+                                ViewGroup.LayoutParams paramsB = click_B.getLayoutParams();
+                                ViewGroup.LayoutParams paramsC = click_C.getLayoutParams();
+                                ViewGroup.LayoutParams paramsD = click_D.getLayoutParams();
+                                ViewGroup.LayoutParams paramsE = click_E.getLayoutParams();
+
+                                paramsA.width = ((300 * A) / top);
+                                paramsB.width = ((300 * B) / top);
+                                paramsC.width = ((300 * C) / top);
+                                paramsD.width = ((300 * D) / top);
+                                paramsE.width = ((300 * E) / top);
+                            }
+
+                        }
+                    }
+                });
     }
 
     private void init() {
@@ -253,11 +294,11 @@ public class PostActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
 
                         DocumentSnapshot document = task.getResult();
-                        A =  document.get("A") == null ? 0 : Integer.parseInt(task.getResult().get("A").toString()) ;
-                        B =  document.get("B") == null ? 0 : Integer.parseInt(task.getResult().get("B").toString()) ;
-                        C =  document.get("C") == null ? 0 : Integer.parseInt(task.getResult().get("C").toString()) ;
-                        D =  document.get("D") == null ? 0 : Integer.parseInt(task.getResult().get("D").toString()) ;
-                        E =  document.get("E") == null ? 0 : Integer.parseInt(task.getResult().get("E").toString()) ;
+                        A = document.get("A") == null ? 0 : Integer.parseInt(task.getResult().get("A").toString());
+                        B = document.get("B") == null ? 0 : Integer.parseInt(task.getResult().get("B").toString());
+                        C = document.get("C") == null ? 0 : Integer.parseInt(task.getResult().get("C").toString());
+                        D = document.get("D") == null ? 0 : Integer.parseInt(task.getResult().get("D").toString());
+                        E = document.get("E") == null ? 0 : Integer.parseInt(task.getResult().get("E").toString());
 
                         linearLayout_uyeSoruAnaliz.setVisibility(View.VISIBLE);
 
@@ -277,11 +318,11 @@ public class PostActivity extends AppCompatActivity {
                         ViewGroup.LayoutParams paramsD = userCevap_D.getLayoutParams();
                         ViewGroup.LayoutParams paramsE = userCevap_E.getLayoutParams();
 
-                        paramsA.width = ((1000 * A) / toplam);
-                        paramsB.width = ((1000 * B) / toplam);
-                        paramsC.width = ((1000 * C) / toplam);
-                        paramsD.width = ((1000 * D) / toplam);
-                        paramsE.width = ((1000 * E) / toplam);
+                        paramsA.width = ((300 * A) / toplam);
+                        paramsB.width = ((300 * B) / toplam);
+                        paramsC.width = ((300 * C) / toplam);
+                        paramsD.width = ((300 * D) / toplam);
+                        paramsE.width = ((300 * E) / toplam);
 
                     }
                 }
@@ -289,28 +330,6 @@ public class PostActivity extends AppCompatActivity {
 
         }
 
-        int top = A + B + C + D + E;
-        if (top == 0) {
-            top = 1;
-        }
-
-        click_A.setText(String.valueOf(A));
-        click_B.setText(String.valueOf(B));
-        click_C.setText(String.valueOf(C));
-        click_D.setText(String.valueOf(D));
-        click_E.setText(String.valueOf(E));
-
-        ViewGroup.LayoutParams paramsA = click_A.getLayoutParams();
-        ViewGroup.LayoutParams paramsB = click_B.getLayoutParams();
-        ViewGroup.LayoutParams paramsC = click_C.getLayoutParams();
-        ViewGroup.LayoutParams paramsD = click_D.getLayoutParams();
-        ViewGroup.LayoutParams paramsE = click_E.getLayoutParams();
-
-        paramsA.width = ((1000 * A) / top);
-        paramsB.width = ((1000 * B) / top);
-        paramsC.width = ((1000 * C) / top);
-        paramsD.width = ((1000 * D) / top);
-        paramsE.width = ((1000 * E) / top);
 
         post_setting.setVisibility(View.VISIBLE);
 
