@@ -13,7 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Kpss">
-        <activity android:name=".PostActivity"></activity>
+        <activity android:name=".SonuclarActivity"></activity>
+        <activity android:name=".PostActivity" />
         <activity android:name=".denemeActivity" />
         <activity android:name=".KonularActivity" />
         <activity android:name=".AddCategoryActivity" />

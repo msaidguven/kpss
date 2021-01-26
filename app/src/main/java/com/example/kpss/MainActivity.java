@@ -75,7 +75,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         } else {
-
             String user_id = mAuth.getCurrentUser().getUid();
             mFirestore.collection("Users").document(user_id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
@@ -93,6 +92,19 @@ public class MainActivity extends AppCompatActivity {
             btnLogin.setVisibility(View.GONE);
             btnRegister.setVisibility(View.GONE);
         }
+
+
+        mFirestore.collection("Menuler").document("0Qa3g1rVY79Fuo5bBqUM")
+                .collection("asdasd").document("dede")
+                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    userName = task.getResult().getString("gj");
+                    Toast.makeText(getApplicationContext(), userName, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
     }
 

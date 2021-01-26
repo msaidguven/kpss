@@ -46,6 +46,7 @@ public class PostActivity extends AppCompatActivity {
 
     private Button click_A, click_B, click_C, click_D, click_E;
     private Button userCevap_A, userCevap_B, userCevap_C, userCevap_D, userCevap_E;
+    private Button buttonSonrakiSoru;
     private ProgressBar progressA;
     private TextView textView_dogru;
     private TextView textView_yanlis;
@@ -67,6 +68,7 @@ public class PostActivity extends AppCompatActivity {
     String post_image;
     String analizCevapIncrement;
     String time;
+    private int uyeninCozduguSonSoru;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,101 +87,84 @@ public class PostActivity extends AppCompatActivity {
 
         init();
 
+        buttonSonrakiSoru.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = getIntent();
+                finish();
+                startActivity(intent);
+            }
+        });
+
         if (mAuth.getCurrentUser() != null) {
             userID = mAuth.getCurrentUser().getUid();
         }
 
-/*
-        mFirestore.collection("Posts")
-                .whereEqualTo("konuID", konuID)
-                .orderBy("postUnic_autoIncrement")
-                .startAt(1)
-                .limit(1)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                postID = document.getId();
-                                post_image = document.getString("post_image");
-                                d_cevap = document.getString("d_cevap");
-                                A = Integer.parseInt(document.get("A").toString());
-                                B = Integer.parseInt(document.get("B").toString());
-                                C = Integer.parseInt(document.get("C").toString());
-                                D = Integer.parseInt(document.get("D").toString());
-                                E = Integer.parseInt(document.get("E").toString());
-                                Picasso.get().load(post_image).into(ImageView_post_image);
-                            }
-                            if (task.getResult().size() == 0) {
-                                Toast.makeText(getApplicationContext(), "Soru Bulunamadı", Toast.LENGTH_SHORT).show();
-                            }
-                        } else {
-                            Toast.makeText(getApplicationContext(), task.getException().toString(), Toast.LENGTH_LONG).show();
-                        }
+        mFirestore.collection("uyeKonuAnaliz").document(userID + konuID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    if (task.getResult().get("uyeninCozduguSonSoru") != null) {
+                        uyeninCozduguSonSoru = Integer.parseInt(task.getResult().get("uyeninCozduguSonSoru").toString());
+                    } else {
+                        uyeninCozduguSonSoru = 0;
                     }
-                });
-*/
 
-        mFirestore.collection("Posts")
-                .whereEqualTo("konuID", konuID)
-                .orderBy("postUnic_autoIncrement")
-                .startAt(1)
-                .limit(1)
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable QuerySnapshot value,
-                                        @Nullable FirebaseFirestoreException e) {
-                        if (e != null) {
-                            Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
-                        }
+                    mFirestore.collection("Posts")
+                            .whereEqualTo("konuID", konuID)
+                            .orderBy("postUnic_autoIncrement")
+                            .startAt(uyeninCozduguSonSoru + 1)
+                            .limit(1)
+                            .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                                @Override
+                                public void onEvent(@Nullable QuerySnapshot value,
+                                                    @Nullable FirebaseFirestoreException e) {
+                                    if (e != null) {
+                                        Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
+                                    }
+                                    if (value.size() == 0) {
+                                        Toast.makeText(getApplicationContext(), "Soru Bulunamadı", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        for (QueryDocumentSnapshot doc : value) {
+                                            postID = doc.getId();
+                                            post_image = doc.getString("post_image");
+                                            d_cevap = doc.getString("d_cevap");
+                                            A = Integer.parseInt(doc.get("A").toString());
+                                            B = Integer.parseInt(doc.get("B").toString());
+                                            C = Integer.parseInt(doc.get("C").toString());
+                                            D = Integer.parseInt(doc.get("D").toString());
+                                            E = Integer.parseInt(doc.get("E").toString());
+                                            Picasso.get().load(post_image).into(ImageView_post_image);
+                                            uyeninCozduguSonSoru = Integer.parseInt(doc.get("postUnic_autoIncrement").toString());
+                                            int top = A + B + C + D + E;
+                                            if (top == 0) {
+                                                top = 1;
+                                            }
+                                            click_A.setText(String.valueOf(A));
+                                            click_B.setText(String.valueOf(B));
+                                            click_C.setText(String.valueOf(C));
+                                            click_D.setText(String.valueOf(D));
+                                            click_E.setText(String.valueOf(E));
 
+                                            ViewGroup.LayoutParams paramsA = click_A.getLayoutParams();
+                                            ViewGroup.LayoutParams paramsB = click_B.getLayoutParams();
+                                            ViewGroup.LayoutParams paramsC = click_C.getLayoutParams();
+                                            ViewGroup.LayoutParams paramsD = click_D.getLayoutParams();
+                                            ViewGroup.LayoutParams paramsE = click_E.getLayoutParams();
 
-                        for (QueryDocumentSnapshot doc : value) {
+                                            paramsA.width = ((300 * A) / top);
+                                            paramsB.width = ((300 * B) / top);
+                                            paramsC.width = ((300 * C) / top);
+                                            paramsD.width = ((300 * D) / top);
+                                            paramsE.width = ((300 * E) / top);
+                                        }
 
-                            if (doc.getData().size() == 0) {
-                                Toast.makeText(getApplicationContext(), "Soru Bulunamadı", Toast.LENGTH_SHORT).show();
-                            } else {
-
-                                postID = doc.getId();
-                                post_image = doc.getString("post_image");
-                                d_cevap = doc.getString("d_cevap");
-                                A = Integer.parseInt(doc.get("A").toString());
-                                B = Integer.parseInt(doc.get("B").toString());
-                                C = Integer.parseInt(doc.get("C").toString());
-                                D = Integer.parseInt(doc.get("D").toString());
-                                E = Integer.parseInt(doc.get("E").toString());
-                                Picasso.get().load(post_image).into(ImageView_post_image);
-
-                                //realTime.setText(String.valueOf(D));
-
-                                int top = A + B + C + D + E;
-                                if (top == 0) {
-                                    top = 1;
+                                    }
                                 }
-
-                                click_A.setText(String.valueOf(A));
-                                click_B.setText(String.valueOf(B));
-                                click_C.setText(String.valueOf(C));
-                                click_D.setText(String.valueOf(D));
-                                click_E.setText(String.valueOf(E));
-
-                                ViewGroup.LayoutParams paramsA = click_A.getLayoutParams();
-                                ViewGroup.LayoutParams paramsB = click_B.getLayoutParams();
-                                ViewGroup.LayoutParams paramsC = click_C.getLayoutParams();
-                                ViewGroup.LayoutParams paramsD = click_D.getLayoutParams();
-                                ViewGroup.LayoutParams paramsE = click_E.getLayoutParams();
-
-                                paramsA.width = ((300 * A) / top);
-                                paramsB.width = ((300 * B) / top);
-                                paramsC.width = ((300 * C) / top);
-                                paramsD.width = ((300 * D) / top);
-                                paramsE.width = ((300 * E) / top);
-                            }
-
-                        }
-                    }
-                });
+                            });
+                }
+            }
+        });
     }
 
     private void init() {
@@ -192,6 +177,7 @@ public class PostActivity extends AppCompatActivity {
         textView_yanlis = findViewById(R.id.textView_yanlis);
         realTime = findViewById(R.id.realTime);
 
+        buttonSonrakiSoru = findViewById(R.id.buttonSonrakiSoru);
 
         click_A = findViewById(R.id.click_A);
         click_B = findViewById(R.id.click_B);
@@ -223,7 +209,6 @@ public class PostActivity extends AppCompatActivity {
         Button vee = (Button) v;
         btn_getText = vee.getText().toString();
 
-
         Button btnA = findViewById(R.id.secenkA);
         Button btnB = findViewById(R.id.secenkB);
         Button btnC = findViewById(R.id.secenkC);
@@ -235,7 +220,6 @@ public class PostActivity extends AppCompatActivity {
         btnC.setEnabled(false);
         btnD.setEnabled(false);
         btnE.setEnabled(false);
-
 
         if (btn_getText.equals(d_cevap)) {
             Toast.makeText(getApplicationContext(), "Tebrikler doğru cevap", Toast.LENGTH_SHORT).show();
@@ -251,9 +235,7 @@ public class PostActivity extends AppCompatActivity {
             analizCevapIncrement = "yanlis_sayisi";
         }
 
-
         if (mAuth.getCurrentUser() != null) {
-
 
             HashMap<String, Object> postAnaliz = new HashMap<>();
             postAnaliz.put("postID", postID);
@@ -268,6 +250,7 @@ public class PostActivity extends AppCompatActivity {
             konuAnaliz.put("konuID", konuID);
             konuAnaliz.put("userID", userID);
             konuAnaliz.put(analizCevapIncrement, FieldValue.increment(1));
+            konuAnaliz.put("uyeninCozduguSonSoru", uyeninCozduguSonSoru);
             konuAnaliz.put("time", FieldValue.serverTimestamp());
             String uyeKonuAnaliz_docName = userID + konuID;
             DocumentReference uyeKonuAnaliz = mFirestore.collection("uyeKonuAnaliz").document(uyeKonuAnaliz_docName);
