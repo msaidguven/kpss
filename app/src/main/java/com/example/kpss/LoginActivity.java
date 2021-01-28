@@ -51,8 +51,6 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
-
-
     }
 
     private void loginUser(String email, String password) {
@@ -64,7 +62,6 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),"Giriş Başarılı", Toast.LENGTH_LONG).show();
                     Intent mainIntent = new Intent(LoginActivity.this,MainActivity.class);
                     finish();
-
                     startActivity(mainIntent);
                 }else {
                     loginProgress.dismiss();

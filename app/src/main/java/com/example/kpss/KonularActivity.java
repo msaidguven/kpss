@@ -34,7 +34,7 @@ public class KonularActivity extends AppCompatActivity {
     private FirebaseFirestore mFirestore;
     private Toolbar mToolbar;
     ListView listViewKonular;
-
+    int menuSoruSayisi;
     String dersID;
     String userID;
     String getDersName;
@@ -95,7 +95,6 @@ public class KonularActivity extends AppCompatActivity {
 
     private void recycler() {
 
-
         recyclerView = findViewById(R.id.recycler_view);
         dersler = new ArrayList<>();
         setOnClickListener();
@@ -113,7 +112,7 @@ public class KonularActivity extends AppCompatActivity {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 String menuID = document.getId();
                                 String menuName = document.getString("menu");
-                                int menuSoruSayisi = Integer.parseInt(document.get("soru_sayisi").toString());
+                                menuSoruSayisi = Integer.parseInt(document.get("soru_sayisi").toString());
                                 dersler.add(new MenuAnaliz(menuID, menuName, menuSoruSayisi));
 
                             }
@@ -130,7 +129,9 @@ public class KonularActivity extends AppCompatActivity {
                 Intent konularActivity = new Intent(KonularActivity.this, PostActivity.class);
                 konularActivity.putExtra("dersID", dersID);
                 konularActivity.putExtra("konuID", dersler.get(position).getDersID());
-                konularActivity.putExtra("dersName", dersler.get(position).getDersName());
+                konularActivity.putExtra("dersName", getDersName);
+                konularActivity.putExtra("konuName", dersler.get(position).getDersName());
+                konularActivity.putExtra("menuSoruSayisi", dersler.get(position).getSoruSayisi());
                 startActivity(konularActivity);
             }
         };

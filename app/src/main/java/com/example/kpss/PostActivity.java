@@ -1,5 +1,7 @@
 package com.example.kpss;
 
+
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -21,6 +23,11 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.anychart.AnyChart;
+import com.anychart.AnyChartView;
+import com.anychart.chart.common.dataentry.DataEntry;
+import com.anychart.chart.common.dataentry.ValueDataEntry;
+import com.anychart.charts.Pie;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -35,21 +42,21 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 
 public class PostActivity extends AppCompatActivity {
 
 
     LinearLayout linearLayout_uyeSoruAnaliz;
-    private TextView realTime;
+    private ProgressDialog dialog;
 
-    private Button click_A, click_B, click_C, click_D, click_E;
+    private Button btnA, btnB, btnC, btnD, btnE;
     private Button userCevap_A, userCevap_B, userCevap_C, userCevap_D, userCevap_E;
-    private Button buttonSonrakiSoru;
-    private ProgressBar progressA;
-    private TextView textView_dogru;
-    private TextView textView_yanlis;
+    private ImageView buttonOncekiSoru, buttonSonrakiSoru;
+    private TextView textView_dogru, textView_yanlis, textView_gosterge;
     LinearLayout fragment_container_view_tag;
     ImageView ImageView_post_image;
     private FirebaseAuth mAuth;
@@ -69,6 +76,13 @@ public class PostActivity extends AppCompatActivity {
     String analizCevapIncrement;
     String time;
     private int uyeninCozduguSonSoru;
+    private int menuSoruSayisi;
+
+    int startAfter = 0;
+
+    AnyChartView anyChartView;
+    String[] secenekler = {"A", "B", "C", "D", "E"};
+    int[] cevaplar = {0,0,0,0,0};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,21 +98,81 @@ public class PostActivity extends AppCompatActivity {
         konuID = intent.getStringExtra("konuID");
         getKonuName = intent.getStringExtra("konuName");
         getDersName = intent.getStringExtra("dersName");
+        menuSoruSayisi = intent.getIntExtra("menuSoruSayisi", menuSoruSayisi);
 
         init();
+        soruGetir();
+
+
+
+        buttonOncekiSoru.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(startAfter == 0){
+                    Toast.makeText(getApplicationContext(), "İlk Sorudasın", Toast.LENGTH_SHORT).show();
+                }else {
+                    startAfter--;
+                    soruGetir();
+                }
+                //Intent intent = getIntent();
+                //finish();
+                //startActivity(intent);
+            }
+        });
 
         buttonSonrakiSoru.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = getIntent();
-                finish();
-                startActivity(intent);
+                if(startAfter+1 == menuSoruSayisi){
+                    Toast.makeText(getApplicationContext(), "Son Sorudasın", Toast.LENGTH_SHORT).show();
+                }else {
+                    startAfter++;
+                    soruGetir();
+                }
+                //Intent intent = getIntent();
+                //finish();
+                //startActivity(intent);
             }
         });
 
         if (mAuth.getCurrentUser() != null) {
             userID = mAuth.getCurrentUser().getUid();
         }
+
+
+    }
+
+    private void soruGetir() {
+
+        if(startAfter+1 == menuSoruSayisi){
+            buttonSonrakiSoru.setEnabled(false);
+        }else {
+            buttonSonrakiSoru.setEnabled(true);
+        }
+        if(startAfter == 0){
+            buttonOncekiSoru.setEnabled(false);
+        }else {
+            buttonOncekiSoru.setEnabled(true);
+        }
+
+        textView_gosterge.setText(startAfter+1 +" / " + menuSoruSayisi);
+        btnA.setEnabled(true);
+        btnB.setEnabled(true);
+        btnC.setEnabled(true);
+        btnD.setEnabled(true);
+        btnE.setEnabled(true);
+
+        btnA.setBackgroundColor(Color.BLUE);
+        btnB.setBackgroundColor(Color.BLUE);
+        btnC.setBackgroundColor(Color.BLUE);
+        btnD.setBackgroundColor(Color.BLUE);
+        btnE.setBackgroundColor(Color.BLUE);
+
+        post_setting.setVisibility(View.GONE);
+
+        dialog.setTitle("lütfen Bekleyiniz");
+        dialog.setMessage("Soru yükleniyor");
+        dialog.show();
 
         mFirestore.collection("uyeKonuAnaliz").document(userID + konuID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -113,7 +187,8 @@ public class PostActivity extends AppCompatActivity {
                     mFirestore.collection("Posts")
                             .whereEqualTo("konuID", konuID)
                             .orderBy("postUnic_autoIncrement")
-                            .startAt(uyeninCozduguSonSoru + 1)
+                            //.startAt(uyeninCozduguSonSoru + 1)
+                            .startAfter(startAfter) //acaba aynı şey mi yukardaki ile
                             .limit(1)
                             .addSnapshotListener(new EventListener<QuerySnapshot>() {
                                 @Override
@@ -140,24 +215,11 @@ public class PostActivity extends AppCompatActivity {
                                             if (top == 0) {
                                                 top = 1;
                                             }
-                                            click_A.setText(String.valueOf(A));
-                                            click_B.setText(String.valueOf(B));
-                                            click_C.setText(String.valueOf(C));
-                                            click_D.setText(String.valueOf(D));
-                                            click_E.setText(String.valueOf(E));
 
-                                            ViewGroup.LayoutParams paramsA = click_A.getLayoutParams();
-                                            ViewGroup.LayoutParams paramsB = click_B.getLayoutParams();
-                                            ViewGroup.LayoutParams paramsC = click_C.getLayoutParams();
-                                            ViewGroup.LayoutParams paramsD = click_D.getLayoutParams();
-                                            ViewGroup.LayoutParams paramsE = click_E.getLayoutParams();
-
-                                            paramsA.width = ((300 * A) / top);
-                                            paramsB.width = ((300 * B) / top);
-                                            paramsC.width = ((300 * C) / top);
-                                            paramsD.width = ((300 * D) / top);
-                                            paramsE.width = ((300 * E) / top);
+                                            setupPieChart();
                                         }
+
+                                        dialog.dismiss();
 
                                     }
                                 }
@@ -168,22 +230,30 @@ public class PostActivity extends AppCompatActivity {
     }
 
     private void init() {
+
+        anyChartView = findViewById(R.id.any_chart_view);
+
         ImageView_post_image = findViewById(R.id.ImageView_post_image);
         fragment_container_view_tag = findViewById(R.id.fragment_container_view_tag);
         postToolbar = findViewById(R.id.postToolbar);
 
+        dialog = new ProgressDialog(this);
+
         post_setting = findViewById(R.id.post_setting);
         textView_dogru = findViewById(R.id.textView_dogru);
         textView_yanlis = findViewById(R.id.textView_yanlis);
-        realTime = findViewById(R.id.realTime);
+        textView_gosterge = findViewById(R.id.textView_gosterge);
 
+        buttonOncekiSoru = findViewById(R.id.buttonOncekiSoru);
         buttonSonrakiSoru = findViewById(R.id.buttonSonrakiSoru);
 
-        click_A = findViewById(R.id.click_A);
-        click_B = findViewById(R.id.click_B);
-        click_C = findViewById(R.id.click_C);
-        click_D = findViewById(R.id.click_D);
-        click_E = findViewById(R.id.click_E);
+        btnA = findViewById(R.id.secenkA);
+        btnB = findViewById(R.id.secenkB);
+        btnC = findViewById(R.id.secenkC);
+        btnD = findViewById(R.id.secenkD);
+        btnE = findViewById(R.id.secenkE);
+
+
 
         userCevap_A = findViewById(R.id.userCevap_A);
         userCevap_B = findViewById(R.id.userCevap_B);
@@ -191,6 +261,8 @@ public class PostActivity extends AppCompatActivity {
         userCevap_D = findViewById(R.id.userCevap_D);
         userCevap_E = findViewById(R.id.userCevap_E);
         linearLayout_uyeSoruAnaliz = findViewById(R.id.linearLayout_uyeSoruAnaliz);
+
+
 
         setSupportActionBar(postToolbar);
         getSupportActionBar().setTitle(getDersName);
@@ -205,15 +277,25 @@ public class PostActivity extends AppCompatActivity {
         return true;
     }
 
+    public void setupPieChart(){
+        Pie pie = AnyChart.pie();
+
+        List<DataEntry> data = new ArrayList<>();
+        data.add(new ValueDataEntry("A", A));
+        data.add(new ValueDataEntry("B", B));
+        data.add(new ValueDataEntry("C", C));
+        data.add(new ValueDataEntry("D", D));
+        data.add(new ValueDataEntry("E", E));
+
+        pie.data(data);
+
+        AnyChartView anyChartView = (AnyChartView) findViewById(R.id.any_chart_view);
+        anyChartView.setChart(pie);
+    }
+
     public void secenekClick(View v) {
         Button vee = (Button) v;
         btn_getText = vee.getText().toString();
-
-        Button btnA = findViewById(R.id.secenkA);
-        Button btnB = findViewById(R.id.secenkB);
-        Button btnC = findViewById(R.id.secenkC);
-        Button btnD = findViewById(R.id.secenkD);
-        Button btnE = findViewById(R.id.secenkE);
 
         btnA.setEnabled(false);
         btnB.setEnabled(false);

@@ -50,4 +50,6 @@ public class MenuAnaliz extends Ders {
     public void setTime(String time) {
         this.time = time;
     }
+
+
 }

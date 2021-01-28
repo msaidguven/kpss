@@ -10,9 +10,10 @@ android {
     defaultConfig {
         applicationId "com.example.kpss"
         minSdkVersion 23
-        targetSdkVersion 30
+        targetSdkVersion 25
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -30,6 +31,8 @@ android {
 }
 
 dependencies {
+
+    api fileTree(include: ['*.jar'], dir: 'libs')
 
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.2.1'
@@ -54,6 +57,7 @@ dependencies {
 
     implementation 'me.srodrigo:androidhintspinner:1.0.0'  //spinner ipucu
 
-    //implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0' //grafik kütüphanesi
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0' //grafik kütüphanesi
+    implementation 'com.github.AnyChart:AnyChart-Android:1.1.2'
 
 }
