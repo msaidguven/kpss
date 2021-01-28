@@ -10,7 +10,7 @@ android {
     defaultConfig {
         applicationId "com.example.kpss"
         minSdkVersion 23
-        targetSdkVersion 25
+        targetSdkVersion 30
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
@@ -58,6 +58,7 @@ dependencies {
     implementation 'me.srodrigo:androidhintspinner:1.0.0'  //spinner ipucu
 
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0' //grafik kütüphanesi
+    implementation 'com.android.support:design:30.0.0'
     implementation 'com.github.AnyChart:AnyChart-Android:1.1.2'
 
 }

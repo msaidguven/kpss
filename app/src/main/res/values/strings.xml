@@ -12,6 +12,7 @@
         <item>C</item>
         <item>D</item>
         <item>E</item>
+        <item>Bilinmiyor</item>
     </string-array>
     <string name="title_activity_scrolling">ScrollingActivity</string>
     <string name="large_text">

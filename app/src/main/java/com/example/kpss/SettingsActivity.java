@@ -1,6 +1,4 @@
 
-
-
 package com.example.kpss;
 
 import android.Manifest;
@@ -51,7 +49,6 @@ public class SettingsActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private StorageReference storageReference;
     private FirebaseFirestore mFirestore;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

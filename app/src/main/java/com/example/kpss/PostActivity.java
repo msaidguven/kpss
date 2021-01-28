@@ -2,10 +2,14 @@ package com.example.kpss;
 
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.BitmapRegionDecoder;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +17,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +25,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.motion.utils.Easing;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -28,6 +34,24 @@ import com.anychart.AnyChartView;
 import com.anychart.chart.common.dataentry.DataEntry;
 import com.anychart.chart.common.dataentry.ValueDataEntry;
 import com.anychart.charts.Pie;
+
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.HorizontalBarChart;
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Description;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.github.mikephil.charting.formatter.PercentFormatter;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -49,12 +73,10 @@ import java.util.List;
 
 public class PostActivity extends AppCompatActivity {
 
-
     LinearLayout linearLayout_uyeSoruAnaliz;
     private ProgressDialog dialog;
 
     private Button btnA, btnB, btnC, btnD, btnE;
-    private Button userCevap_A, userCevap_B, userCevap_C, userCevap_D, userCevap_E;
     private ImageView buttonOncekiSoru, buttonSonrakiSoru;
     private TextView textView_dogru, textView_yanlis, textView_gosterge;
     LinearLayout fragment_container_view_tag;
@@ -80,9 +102,14 @@ public class PostActivity extends AppCompatActivity {
 
     int startAfter = 0;
 
-    AnyChartView anyChartView;
-    String[] secenekler = {"A", "B", "C", "D", "E"};
-    int[] cevaplar = {0,0,0,0,0};
+    private int[] yData;
+    private String[] xData = new String[]{"A", "B", "C", "D", "E"};
+    private List xDatas = new ArrayList();
+
+    com.github.mikephil.charting.charts.PieChart pieChart;
+    com.github.mikephil.charting.charts.PieChart pieChart1;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,13 +131,12 @@ public class PostActivity extends AppCompatActivity {
         soruGetir();
 
 
-
         buttonOncekiSoru.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(startAfter == 0){
+                if (startAfter == 0) {
                     Toast.makeText(getApplicationContext(), "İlk Sorudasın", Toast.LENGTH_SHORT).show();
-                }else {
+                } else {
                     startAfter--;
                     soruGetir();
                 }
@@ -123,9 +149,9 @@ public class PostActivity extends AppCompatActivity {
         buttonSonrakiSoru.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(startAfter+1 == menuSoruSayisi){
+                if (startAfter + 1 == menuSoruSayisi) {
                     Toast.makeText(getApplicationContext(), "Son Sorudasın", Toast.LENGTH_SHORT).show();
-                }else {
+                } else {
                     startAfter++;
                     soruGetir();
                 }
@@ -139,29 +165,28 @@ public class PostActivity extends AppCompatActivity {
             userID = mAuth.getCurrentUser().getUid();
         }
 
-
     }
+
 
     private void soruGetir() {
 
-        if(startAfter+1 == menuSoruSayisi){
+        if (startAfter + 1 == menuSoruSayisi) {
             buttonSonrakiSoru.setEnabled(false);
-        }else {
+        } else {
             buttonSonrakiSoru.setEnabled(true);
         }
-        if(startAfter == 0){
+        if (startAfter == 0) {
             buttonOncekiSoru.setEnabled(false);
-        }else {
+        } else {
             buttonOncekiSoru.setEnabled(true);
         }
 
-        textView_gosterge.setText(startAfter+1 +" / " + menuSoruSayisi);
+        textView_gosterge.setText(startAfter + 1 + " / " + menuSoruSayisi);
         btnA.setEnabled(true);
         btnB.setEnabled(true);
         btnC.setEnabled(true);
         btnD.setEnabled(true);
         btnE.setEnabled(true);
-
         btnA.setBackgroundColor(Color.BLUE);
         btnB.setBackgroundColor(Color.BLUE);
         btnC.setBackgroundColor(Color.BLUE);
@@ -172,6 +197,8 @@ public class PostActivity extends AppCompatActivity {
 
         dialog.setTitle("lütfen Bekleyiniz");
         dialog.setMessage("Soru yükleniyor");
+        dialog.closeOptionsMenu();
+        dialog.setOnDismissListener(DialogInterface::cancel);
         dialog.show();
 
         mFirestore.collection("uyeKonuAnaliz").document(userID + konuID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -211,16 +238,13 @@ public class PostActivity extends AppCompatActivity {
                                             E = Integer.parseInt(doc.get("E").toString());
                                             Picasso.get().load(post_image).into(ImageView_post_image);
                                             uyeninCozduguSonSoru = Integer.parseInt(doc.get("postUnic_autoIncrement").toString());
-                                            int top = A + B + C + D + E;
-                                            if (top == 0) {
-                                                top = 1;
-                                            }
 
-                                            setupPieChart();
+                                            yData = new int[]{A, B, C, D, E};
+                                            //setupPieChart();
+                                            setupPieChart1();
+                                            setupPieChart2();
                                         }
-
                                         dialog.dismiss();
-
                                     }
                                 }
                             });
@@ -231,7 +255,10 @@ public class PostActivity extends AppCompatActivity {
 
     private void init() {
 
-        anyChartView = findViewById(R.id.any_chart_view);
+        pieChart = findViewById(R.id.pie_chart);
+        pieChart1 = findViewById(R.id.pie_chart1);
+
+
 
         ImageView_post_image = findViewById(R.id.ImageView_post_image);
         fragment_container_view_tag = findViewById(R.id.fragment_container_view_tag);
@@ -254,20 +281,13 @@ public class PostActivity extends AppCompatActivity {
         btnE = findViewById(R.id.secenkE);
 
 
-
-        userCevap_A = findViewById(R.id.userCevap_A);
-        userCevap_B = findViewById(R.id.userCevap_B);
-        userCevap_C = findViewById(R.id.userCevap_C);
-        userCevap_D = findViewById(R.id.userCevap_D);
-        userCevap_E = findViewById(R.id.userCevap_E);
         linearLayout_uyeSoruAnaliz = findViewById(R.id.linearLayout_uyeSoruAnaliz);
-
-
 
         setSupportActionBar(postToolbar);
         getSupportActionBar().setTitle(getDersName);
         getSupportActionBar().setIcon(R.drawable.icon_setting);
         getSupportActionBar().setSubtitle(getKonuName);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -277,31 +297,87 @@ public class PostActivity extends AppCompatActivity {
         return true;
     }
 
-    public void setupPieChart(){
+    public void setupPieChart() {
         Pie pie = AnyChart.pie();
-
         List<DataEntry> data = new ArrayList<>();
         data.add(new ValueDataEntry("A", A));
         data.add(new ValueDataEntry("B", B));
         data.add(new ValueDataEntry("C", C));
         data.add(new ValueDataEntry("D", D));
         data.add(new ValueDataEntry("E", E));
-
         pie.data(data);
-
         AnyChartView anyChartView = (AnyChartView) findViewById(R.id.any_chart_view);
         anyChartView.setChart(pie);
+    }
+
+    public void setupPieChart1() {
+        pieChart.getDescription().setText("Doğru Cevap : " + d_cevap);
+        pieChart.getDescription().setTextSize(16f);
+        pieChart.setRotationEnabled(true);
+        pieChart.setHoleRadius(25f);
+        pieChart.setTransparentCircleAlpha(0);
+        //pieChart.setCenterText(d_cevap);
+        // pieChart.setCenterTextColor(R.color.colorPrimaryDark);
+        //pieChart.setCenterTextSize(20f);
+        pieChart.setDrawEntryLabels(false);
+        pieChart.animateY(3000);
+        pieChart.animateX(3000);
+        addDataset();
+        pieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(Entry e, Highlight h) {
+                float secili = Float.parseFloat(e.toString().substring(17));
+                int index = 0;
+                for (int i = 0; i < yData.length; i++) {
+                    if (yData[i] == secili) {
+                        index = i;
+                    }
+                }
+                Toast.makeText(getApplicationContext(), "" + xData[index], Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected() {
+            }
+        });
+    }
+
+
+    public void setupPieChart2() {
+        pieChart1.getDescription().setText("Doğru Cevap : " + d_cevap);
+        pieChart1.getDescription().setTextSize(16f);
+        pieChart1.setRotationEnabled(true);
+        pieChart1.setHoleRadius(25f);
+        pieChart1.setTransparentCircleAlpha(0);
+        //pieChart.setCenterText(d_cevap);
+        // pieChart.setCenterTextColor(R.color.colorPrimaryDark);
+        //pieChart.setCenterTextSize(20f);
+        pieChart1.setDrawEntryLabels(false);
+        pieChart1.animateY(3000);
+        pieChart1.animateX(3000);
+        addDataset1();
+        pieChart1.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(Entry e, Highlight h) {
+                float secili = Float.parseFloat(e.toString().substring(17));
+                int index = 0;
+                for (int i = 0; i < yData.length; i++) {
+                    if (yData[i] == secili) {
+                        index = i;
+                    }
+                }
+                Toast.makeText(getApplicationContext(), "" + xData[index], Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected() {
+            }
+        });
     }
 
     public void secenekClick(View v) {
         Button vee = (Button) v;
         btn_getText = vee.getText().toString();
-
-        btnA.setEnabled(false);
-        btnB.setEnabled(false);
-        btnC.setEnabled(false);
-        btnD.setEnabled(false);
-        btnE.setEnabled(false);
 
         if (btn_getText.equals(d_cevap)) {
             Toast.makeText(getApplicationContext(), "Tebrikler doğru cevap", Toast.LENGTH_SHORT).show();
@@ -309,16 +385,37 @@ public class PostActivity extends AppCompatActivity {
             textView_dogru.setText("Tebrikler doğru vecap verdiniz");
             textView_dogru.setVisibility(View.VISIBLE);
             analizCevapIncrement = "dogru_sayisi";
+            istatistikleriKaydet();
+        } else if (d_cevap.equals("Bilinmiyor")) {
+            textView_yanlis.setTextColor(Color.BLUE);
+            textView_yanlis.setText("Bu soruya doğru cevap eklenmemiş. Çözüm ekleyerek doğru cevabın bulunmasına yardım edebilirsin.");
+            textView_yanlis.setVisibility(View.VISIBLE);
         } else {
             Toast.makeText(getApplicationContext(), "Yanlış cevap", Toast.LENGTH_SHORT).show();
             vee.setBackgroundColor(Color.RED);
             textView_yanlis.setText("Yanlış cevap verdiniz. Doğru cevap " + d_cevap + " olacak.");
             textView_yanlis.setVisibility(View.VISIBLE);
             analizCevapIncrement = "yanlis_sayisi";
+            istatistikleriKaydet();
         }
 
-        if (mAuth.getCurrentUser() != null) {
+        btnA.setEnabled(false);
+        btnB.setEnabled(false);
+        btnC.setEnabled(false);
+        btnD.setEnabled(false);
+        btnE.setEnabled(false);
 
+        DocumentReference postCevap_increment = mFirestore.collection("Posts").document(postID);
+        postCevap_increment.update(btn_getText, FieldValue.increment(1));
+
+        post_setting.setVisibility(View.VISIBLE);
+        linearLayout_uyeSoruAnaliz.setVisibility(View.VISIBLE);
+
+    }
+
+
+    private void istatistikleriKaydet() {
+        if (mAuth.getCurrentUser() != null) {
             HashMap<String, Object> postAnaliz = new HashMap<>();
             postAnaliz.put("postID", postID);
             postAnaliz.put("userID", userID);
@@ -347,56 +444,79 @@ public class PostActivity extends AppCompatActivity {
             DocumentReference uyeDersAnaliz = mFirestore.collection("uyeDersAnaliz").document(uyeDersAnaliz_docName);
             uyeDersAnaliz.set(dersAnaliz, SetOptions.merge());
 
-            DocumentReference postCevap_increment = mFirestore.collection("Posts").document(postID);
-            postCevap_increment.update(btn_getText, FieldValue.increment(1));
-
-            //UyeSoruAnaliz uyeninCevaplari = new UyeSoruAnaliz(uyeSoruAnaliz_docName);
-
-
             mFirestore.collection("uyeSoruAnaliz").document(uyeSoruAnaliz_docName).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                     if (task.isSuccessful()) {
-
                         DocumentSnapshot document = task.getResult();
                         A = document.get("A") == null ? 0 : Integer.parseInt(task.getResult().get("A").toString());
                         B = document.get("B") == null ? 0 : Integer.parseInt(task.getResult().get("B").toString());
                         C = document.get("C") == null ? 0 : Integer.parseInt(task.getResult().get("C").toString());
                         D = document.get("D") == null ? 0 : Integer.parseInt(task.getResult().get("D").toString());
                         E = document.get("E") == null ? 0 : Integer.parseInt(task.getResult().get("E").toString());
-
-                        linearLayout_uyeSoruAnaliz.setVisibility(View.VISIBLE);
-
-                        int toplam = A + B + C + D + E;
-                        if (toplam == 0) {
-                            toplam = 1;
-                        }
-                        userCevap_A.setText(String.valueOf(A));
-                        userCevap_B.setText(String.valueOf(B));
-                        userCevap_C.setText(String.valueOf(C));
-                        userCevap_D.setText(String.valueOf(D));
-                        userCevap_E.setText(String.valueOf(E));
-
-                        ViewGroup.LayoutParams paramsA = userCevap_A.getLayoutParams();
-                        ViewGroup.LayoutParams paramsB = userCevap_B.getLayoutParams();
-                        ViewGroup.LayoutParams paramsC = userCevap_C.getLayoutParams();
-                        ViewGroup.LayoutParams paramsD = userCevap_D.getLayoutParams();
-                        ViewGroup.LayoutParams paramsE = userCevap_E.getLayoutParams();
-
-                        paramsA.width = ((300 * A) / toplam);
-                        paramsB.width = ((300 * B) / toplam);
-                        paramsC.width = ((300 * C) / toplam);
-                        paramsD.width = ((300 * D) / toplam);
-                        paramsE.width = ((300 * E) / toplam);
-
                     }
                 }
             });
+        }
+    }
 
+
+    private void addDataset() {
+        ArrayList<PieEntry> yEntry = new ArrayList<>();
+        ArrayList<String> xEntry = new ArrayList<>();
+
+        for (int i = 0; i < yData.length; i++) {
+            yEntry.add(new PieEntry(yData[i] , xData[i]));
+        }
+        for (int i = 0; i < xData.length; i++) {
+            xEntry.add(xData[i]);
         }
 
-
-        post_setting.setVisibility(View.VISIBLE);
-
+        PieDataSet pieDataSet = new PieDataSet(yEntry, "");
+        pieDataSet.setSliceSpace(3);
+        pieDataSet.setValueTextSize(13f);
+        ArrayList<Integer> colors = new ArrayList<>();
+        colors.add(Color.BLUE);
+        colors.add(Color.RED);
+        colors.add(Color.GREEN);
+        colors.add(Color.CYAN);
+        colors.add(Color.YELLOW);
+        colors.add(Color.MAGENTA);
+        pieDataSet.setColors(colors);
+        pieDataSet.setFormSize(19f);
+        PieData pieData = new PieData(pieDataSet);
+        pieChart.setData(pieData);
+        pieChart.invalidate();
     }
+
+    private void addDataset1() {
+        ArrayList<PieEntry> yEntry = new ArrayList<>();
+        ArrayList<String> xEntry = new ArrayList<>();
+
+        for (int i = 0; i < yData.length; i++) {
+            yEntry.add(new PieEntry(yData[i] , xData[i]));
+        }
+        for (int i = 0; i < xData.length; i++) {
+            xEntry.add(xData[i]);
+        }
+
+        PieDataSet pieDataSet = new PieDataSet(yEntry, "");
+        pieDataSet.setSliceSpace(3);
+        pieDataSet.setValueTextSize(13f);
+        ArrayList<Integer> colors = new ArrayList<>();
+        colors.add(Color.BLUE);
+        colors.add(Color.RED);
+        colors.add(Color.GREEN);
+        colors.add(Color.CYAN);
+        colors.add(Color.YELLOW);
+        colors.add(Color.MAGENTA);
+        pieDataSet.setColors(colors);
+        pieDataSet.setFormSize(19f);
+        PieData pieData = new PieData(pieDataSet);
+        pieChart1.setData(pieData);
+        pieChart1.invalidate();
+    }
+
+
+
 }
