@@ -8,22 +8,12 @@
     android:orientation="vertical">
 
     <TextView
-        android:visibility="gone"
-        android:id="@+id/textView_dogru"
+        android:id="@+id/textView_aciklama"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:padding="5dp"
         android:textColor="#09E815" />
-
-    <TextView
-        android:visibility="gone"
-        android:id="@+id/textView_yanlis"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:padding="5dp"
-        android:textColor="#F60505" />
 
     <View
         android:layout_width="match_parent"
@@ -49,17 +39,10 @@
         android:orientation="vertical">
 
         <com.github.mikephil.charting.charts.PieChart
-            android:id="@+id/pie_chart1"
+            android:id="@+id/pie_chart"
             android:layout_width="match_parent"
             android:layout_height="300dp"
             android:layout_margin="10dp" />
-
-            <com.anychart.AnyChartView
-                android:visibility="gone"
-                android:id="@+id/any_chart_view"
-                android:layout_width="match_parent"
-                android:layout_height="300dp" />
-
     </LinearLayout>
 
     <LinearLayout
@@ -86,11 +69,10 @@
             android:textColor="#037DFF" />
 
         <com.github.mikephil.charting.charts.PieChart
-            android:id="@+id/pie_chart"
+            android:id="@+id/pie_chart1"
             android:layout_width="match_parent"
             android:layout_height="300dp"
             android:layout_margin="10dp" />
-
 
 
         <View
@@ -99,6 +81,7 @@
             android:background="@android:color/black" />
 
     </LinearLayout>
+
 
 
 </LinearLayout>

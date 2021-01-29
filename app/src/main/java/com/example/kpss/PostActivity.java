@@ -35,6 +35,7 @@ import com.anychart.chart.common.dataentry.DataEntry;
 import com.anychart.chart.common.dataentry.ValueDataEntry;
 import com.anychart.charts.Pie;
 
+import com.anychart.core.ui.Center;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.charts.PieChart;
@@ -78,7 +79,7 @@ public class PostActivity extends AppCompatActivity {
 
     private Button btnA, btnB, btnC, btnD, btnE;
     private ImageView buttonOncekiSoru, buttonSonrakiSoru;
-    private TextView textView_dogru, textView_yanlis, textView_gosterge;
+    private TextView textView_aciklama, textView_gosterge;
     LinearLayout fragment_container_view_tag;
     ImageView ImageView_post_image;
     private FirebaseAuth mAuth;
@@ -99,6 +100,8 @@ public class PostActivity extends AppCompatActivity {
     String time;
     private int uyeninCozduguSonSoru;
     private int menuSoruSayisi;
+    double yuzde;
+    double toplam;
 
     int startAfter = 0;
 
@@ -108,7 +111,6 @@ public class PostActivity extends AppCompatActivity {
 
     com.github.mikephil.charting.charts.PieChart pieChart;
     com.github.mikephil.charting.charts.PieChart pieChart1;
-
 
 
     @Override
@@ -240,11 +242,14 @@ public class PostActivity extends AppCompatActivity {
                                             uyeninCozduguSonSoru = Integer.parseInt(doc.get("postUnic_autoIncrement").toString());
 
                                             yData = new int[]{A, B, C, D, E};
-                                            //setupPieChart();
-                                            setupPieChart1();
-                                            setupPieChart2();
+                                            setupPieChart();
+
+                                            toplam = A + B + C + D + E;
+
+
                                         }
                                         dialog.dismiss();
+
                                     }
                                 }
                             });
@@ -253,11 +258,11 @@ public class PostActivity extends AppCompatActivity {
         });
     }
 
+
     private void init() {
 
         pieChart = findViewById(R.id.pie_chart);
         pieChart1 = findViewById(R.id.pie_chart1);
-
 
 
         ImageView_post_image = findViewById(R.id.ImageView_post_image);
@@ -267,8 +272,7 @@ public class PostActivity extends AppCompatActivity {
         dialog = new ProgressDialog(this);
 
         post_setting = findViewById(R.id.post_setting);
-        textView_dogru = findViewById(R.id.textView_dogru);
-        textView_yanlis = findViewById(R.id.textView_yanlis);
+        textView_aciklama = findViewById(R.id.textView_aciklama);
         textView_gosterge = findViewById(R.id.textView_gosterge);
 
         buttonOncekiSoru = findViewById(R.id.buttonOncekiSoru);
@@ -297,20 +301,8 @@ public class PostActivity extends AppCompatActivity {
         return true;
     }
 
-    public void setupPieChart() {
-        Pie pie = AnyChart.pie();
-        List<DataEntry> data = new ArrayList<>();
-        data.add(new ValueDataEntry("A", A));
-        data.add(new ValueDataEntry("B", B));
-        data.add(new ValueDataEntry("C", C));
-        data.add(new ValueDataEntry("D", D));
-        data.add(new ValueDataEntry("E", E));
-        pie.data(data);
-        AnyChartView anyChartView = (AnyChartView) findViewById(R.id.any_chart_view);
-        anyChartView.setChart(pie);
-    }
 
-    public void setupPieChart1() {
+    public void setupPieChart() {
         pieChart.getDescription().setText("Doğru Cevap : " + d_cevap);
         pieChart.getDescription().setTextSize(16f);
         pieChart.setRotationEnabled(true);
@@ -343,7 +335,7 @@ public class PostActivity extends AppCompatActivity {
     }
 
 
-    public void setupPieChart2() {
+    public void setupPieChart1() {
         pieChart1.getDescription().setText("Doğru Cevap : " + d_cevap);
         pieChart1.getDescription().setTextSize(16f);
         pieChart1.setRotationEnabled(true);
@@ -375,6 +367,7 @@ public class PostActivity extends AppCompatActivity {
         });
     }
 
+
     public void secenekClick(View v) {
         Button vee = (Button) v;
         btn_getText = vee.getText().toString();
@@ -382,40 +375,43 @@ public class PostActivity extends AppCompatActivity {
         if (btn_getText.equals(d_cevap)) {
             Toast.makeText(getApplicationContext(), "Tebrikler doğru cevap", Toast.LENGTH_SHORT).show();
             vee.setBackgroundColor(Color.GREEN);
-            textView_dogru.setText("Tebrikler doğru vecap verdiniz");
-            textView_dogru.setVisibility(View.VISIBLE);
+            textView_aciklama.setTextColor(Color.GREEN);
+            textView_aciklama.setText("Tebrikler doğru vecap verdiniz");
             analizCevapIncrement = "dogru_sayisi";
             istatistikleriKaydet();
         } else if (d_cevap.equals("Bilinmiyor")) {
-            textView_yanlis.setTextColor(Color.BLUE);
-            textView_yanlis.setText("Bu soruya doğru cevap eklenmemiş. Çözüm ekleyerek doğru cevabın bulunmasına yardım edebilirsin.");
-            textView_yanlis.setVisibility(View.VISIBLE);
+            textView_aciklama.setTextColor(Color.BLUE);
+            textView_aciklama.setText("Bu soruya doğru cevap eklenmemiş. Çözüm ekleyerek doğru cevabın bulunmasına yardım edebilirsin.");
         } else {
             Toast.makeText(getApplicationContext(), "Yanlış cevap", Toast.LENGTH_SHORT).show();
             vee.setBackgroundColor(Color.RED);
-            textView_yanlis.setText("Yanlış cevap verdiniz. Doğru cevap " + d_cevap + " olacak.");
-            textView_yanlis.setVisibility(View.VISIBLE);
+            textView_aciklama.setTextColor(Color.RED);
+            textView_aciklama.setText("Yanlış cevap verdiniz. Doğru cevap " + d_cevap + " olacak.");
             analizCevapIncrement = "yanlis_sayisi";
             istatistikleriKaydet();
         }
-
+/*
         btnA.setEnabled(false);
         btnB.setEnabled(false);
         btnC.setEnabled(false);
         btnD.setEnabled(false);
         btnE.setEnabled(false);
+*/
 
         DocumentReference postCevap_increment = mFirestore.collection("Posts").document(postID);
         postCevap_increment.update(btn_getText, FieldValue.increment(1));
 
         post_setting.setVisibility(View.VISIBLE);
-        linearLayout_uyeSoruAnaliz.setVisibility(View.VISIBLE);
+
 
     }
 
 
     private void istatistikleriKaydet() {
         if (mAuth.getCurrentUser() != null) {
+
+            linearLayout_uyeSoruAnaliz.setVisibility(View.VISIBLE);
+
             HashMap<String, Object> postAnaliz = new HashMap<>();
             postAnaliz.put("postID", postID);
             postAnaliz.put("userID", userID);
@@ -454,6 +450,44 @@ public class PostActivity extends AppCompatActivity {
                         C = document.get("C") == null ? 0 : Integer.parseInt(task.getResult().get("C").toString());
                         D = document.get("D") == null ? 0 : Integer.parseInt(task.getResult().get("D").toString());
                         E = document.get("E") == null ? 0 : Integer.parseInt(task.getResult().get("E").toString());
+                        setupPieChart1();
+
+                        /*
+                        String[] textArray = {
+                                "A = " + String.valueOf(A),
+                                "B = " + String.valueOf(B),
+                                "C = " + String.valueOf(C),
+                                "D = " + String.valueOf(D),
+                                "E = " + String.valueOf(E),
+                        };
+
+                        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.linearLayout_sonuclariGoster);
+                        linearLayout.setOrientation(LinearLayout.VERTICAL);
+
+                        TextView textView1 = new TextView(PostActivity.this);
+                        textView1.setText("Bu soru " + String.valueOf(toplam) + " defa çözüldü.");
+                        textView1.setTextAppearance(R.style.textView);
+                        textView1.setBackgroundColor(Color.WHITE);
+                        textView1.setTextColor(Color.BLACK);
+                        textView1.setPadding(5, 5, 5, 5);
+                        textView1.setGravity(View.TEXT_ALIGNMENT_CENTER);
+                        linearLayout.addView(textView1);
+
+                        for (int i = 0; i < textArray.length; i++) {
+                            TextView textView = new TextView(PostActivity.this);
+                            if (d_cevap.equals(xData[i]))
+                                textView.setTextColor(Color.GREEN);
+                            else
+                                textView.setTextColor(Color.RED);
+                            yuzde = (100 * yData[i]) / toplam;
+                            textView.setText(textArray[i]);
+                            textView.setTextAppearance(R.style.textView);
+                            textView.setBackgroundColor(Color.WHITE);
+                            textView.setGravity(View.TEXT_ALIGNMENT_CENTER);
+                            linearLayout.addView(textView);
+                        }
+                        */
+
                     }
                 }
             });
@@ -466,7 +500,7 @@ public class PostActivity extends AppCompatActivity {
         ArrayList<String> xEntry = new ArrayList<>();
 
         for (int i = 0; i < yData.length; i++) {
-            yEntry.add(new PieEntry(yData[i] , xData[i]));
+            yEntry.add(new PieEntry(yData[i], xData[i]));
         }
         for (int i = 0; i < xData.length; i++) {
             xEntry.add(xData[i]);
@@ -494,7 +528,7 @@ public class PostActivity extends AppCompatActivity {
         ArrayList<String> xEntry = new ArrayList<>();
 
         for (int i = 0; i < yData.length; i++) {
-            yEntry.add(new PieEntry(yData[i] , xData[i]));
+            yEntry.add(new PieEntry(yData[i], xData[i]));
         }
         for (int i = 0; i < xData.length; i++) {
             xEntry.add(xData[i]);
@@ -516,7 +550,6 @@ public class PostActivity extends AppCompatActivity {
         pieChart1.setData(pieData);
         pieChart1.invalidate();
     }
-
 
 
 }
