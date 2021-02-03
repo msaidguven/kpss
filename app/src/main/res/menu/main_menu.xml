@@ -39,6 +39,10 @@
         android:icon="@drawable/icon_setting"
         android:title="Recycler" />
 
+    <item
+        android:id="@+id/menu_new_main_recycler"
+        android:title="New Main Recycler" />
+
 
 
 </menu>

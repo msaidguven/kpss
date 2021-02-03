@@ -11,6 +11,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -23,6 +24,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.motion.utils.Easing;
@@ -37,7 +39,6 @@ import com.anychart.chart.common.dataentry.ValueDataEntry;
 import com.anychart.charts.Pie;
 import com.anychart.core.ui.Center;
 */
-
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.HorizontalBarChart;
@@ -57,6 +58,8 @@ import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
@@ -68,13 +71,15 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class PostActivity extends AppCompatActivity {
+public class PostViewActivity extends AppCompatActivity {
 
     LinearLayout linearLayout_uyeSoruAnaliz;
     private ProgressDialog dialog;
@@ -86,6 +91,7 @@ public class PostActivity extends AppCompatActivity {
     ImageView ImageView_post_image;
     private FirebaseAuth mAuth;
     private FirebaseFirestore mFirestore;
+    private StorageReference storageReference;
     private Toolbar postToolbar;
     private View post_setting;
     int A, B, C, D, E;
@@ -114,6 +120,13 @@ public class PostActivity extends AppCompatActivity {
     com.github.mikephil.charting.charts.PieChart pieChart;
     com.github.mikephil.charting.charts.PieChart pieChart1;
 
+    /*
+    @Override    public void onBackPressed() {
+        Intent intent = new Intent(PostViewActivity.this, MainActivity.class);
+        finish();
+        startActivity(intent);
+    }
+*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -126,6 +139,7 @@ public class PostActivity extends AppCompatActivity {
         Intent intent = getIntent();
         dersID = intent.getStringExtra("dersID");
         konuID = intent.getStringExtra("konuID");
+        postID = intent.getStringExtra("postID");
         getKonuName = intent.getStringExtra("konuName");
         getDersName = intent.getStringExtra("dersName");
         menuSoruSayisi = intent.getIntExtra("menuSoruSayisi", menuSoruSayisi);
@@ -167,7 +181,6 @@ public class PostActivity extends AppCompatActivity {
         if (mAuth.getCurrentUser() != null) {
             userID = mAuth.getCurrentUser().getUid();
         }
-
     }
 
 
@@ -198,65 +211,37 @@ public class PostActivity extends AppCompatActivity {
 
         post_setting.setVisibility(View.GONE);
 
-        dialog.setTitle("Lütfen Bekleyin");
+        dialog.setTitle("lütfen Bekleyiniz");
         dialog.setMessage("Soru yükleniyor");
         dialog.closeOptionsMenu();
         dialog.setOnDismissListener(DialogInterface::cancel);
         dialog.show();
 
-        mFirestore.collection("uyeKonuAnaliz").document(userID + konuID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        mFirestore.collection("Posts").document(postID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
-                    if (task.getResult().get("uyeninCozduguSonSoru") != null) {
-                        uyeninCozduguSonSoru = Integer.parseInt(task.getResult().get("uyeninCozduguSonSoru").toString());
-                    } else {
-                        uyeninCozduguSonSoru = 0;
-                    }
+                    DocumentSnapshot document = task.getResult();
 
-                    mFirestore.collection("Posts")
-                            .whereEqualTo("konuID", konuID)
-                            .orderBy("postUnic_autoIncrement")
-                            //.startAt(uyeninCozduguSonSoru + 1)
-                            .startAfter(startAfter) //acaba aynı şey mi yukardaki ile
-                            .limit(1)
-                            .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                                @Override
-                                public void onEvent(@Nullable QuerySnapshot value,
-                                                    @Nullable FirebaseFirestoreException e) {
-                                    if (e != null) {
-                                        Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
-                                    }
-                                    if (value.size() == 0) {
-                                        Toast.makeText(getApplicationContext(), "Soru Bulunamadı", Toast.LENGTH_SHORT).show();
-                                    } else {
-                                        for (QueryDocumentSnapshot doc : value) {
-                                            postID = doc.getId();
-                                            post_image = doc.getString("post_image");
-                                            d_cevap = doc.getString("d_cevap");
-                                            A = Integer.parseInt(doc.get("A").toString());
-                                            B = Integer.parseInt(doc.get("B").toString());
-                                            C = Integer.parseInt(doc.get("C").toString());
-                                            D = Integer.parseInt(doc.get("D").toString());
-                                            E = Integer.parseInt(doc.get("E").toString());
-                                            Picasso.get().load(post_image).into(ImageView_post_image);
-                                            uyeninCozduguSonSoru = Integer.parseInt(doc.get("postUnic_autoIncrement").toString());
+                    postID = document.getId();
+                    post_image = document.getString("post_image");
+                    d_cevap = document.getString("d_cevap");
 
-                                            yData = new int[]{A, B, C, D, E};
-                                            setupPieChart();
+                    Picasso.get().load(post_image).into(ImageView_post_image);
 
-                                            toplam = A + B + C + D + E;
+                    A = document.get("A") == null ? 0 : Integer.parseInt(document.get("A").toString());
+                    B = document.get("B") == null ? 0 : Integer.parseInt(document.get("B").toString());
+                    C = document.get("C") == null ? 0 : Integer.parseInt(document.get("C").toString());
+                    D = document.get("D") == null ? 0 : Integer.parseInt(document.get("D").toString());
+                    E = document.get("E") == null ? 0 : Integer.parseInt(document.get("E").toString());
 
+                    yData = new int[]{A, B, C, D, E};
+                    setupPieChart();
 
-                                        }
-                                        dialog.dismiss();
-
-                                    }
-                                }
-                            });
                 }
             }
         });
+        dialog.dismiss();
     }
 
 
@@ -299,6 +284,79 @@ public class PostActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.post_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        super.onOptionsItemSelected(item);
+
+        dialog.setTitle("Lütfen Bekleyin");
+        dialog.setMessage("Siliniyor");
+        dialog.closeOptionsMenu();
+        dialog.setOnDismissListener(DialogInterface::cancel);
+        dialog.show();
+
+        /*
+        storageReference = FirebaseStorage.getInstance().getReference()
+        storageReference = mFirebaseStorage.getReferenceFromUrl(mImageUrl);
+        StorageReference photoRef = mFirebaseStorage.getReferenceFromUrl(mImageUrl);
+*/
+
+
+        if (item.getItemId() == R.id.menu_deletePost) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setCancelable(false);
+            builder.setMessage("Bu soruyu silmek istiyor musunuz?");
+            builder.setPositiveButton("EVET", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+                    StorageReference storageReference = firebaseStorage.getReferenceFromUrl(post_image);
+                    storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            mFirestore.collection("Posts").document(postID)
+                                    .delete()
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            dialog.dismiss();
+                                            Toast.makeText(getApplicationContext(), "Soru Silindi", Toast.LENGTH_SHORT);
+                                            Intent intent = new Intent(PostViewActivity.this, MainActivity.class);
+                                            startActivity(intent);
+                                            finish();
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Toast.makeText(getApplicationContext(), "Error deleting document", Toast.LENGTH_SHORT).show();
+                                            dialog.dismiss();
+                                        }
+                                    });
+                        }
+                    });
+                }
+            });
+            builder.setNegativeButton("HAYIR", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    // Hayır'a baslınca yapılacak işmeleri yazınız
+                    dialog.cancel();
+                }
+            });
+            AlertDialog alert = builder.create();
+            alert.show();
+
+
+        }
+
+        if (item.getItemId() == R.id.menu_addPost) {
+            //Intent settingsIntent = new Intent(MainActivity.this, AddPost.class);
+            //startActivity(settingsIntent);
+        }
+
         return true;
     }
 
@@ -450,43 +508,8 @@ public class PostActivity extends AppCompatActivity {
                         C = document.get("C") == null ? 0 : Integer.parseInt(task.getResult().get("C").toString());
                         D = document.get("D") == null ? 0 : Integer.parseInt(task.getResult().get("D").toString());
                         E = document.get("E") == null ? 0 : Integer.parseInt(task.getResult().get("E").toString());
+                        yData = new int[]{A, B, C, D, E};
                         setupPieChart1();
-
-                        /*
-                        String[] textArray = {
-                                "A = " + String.valueOf(A),
-                                "B = " + String.valueOf(B),
-                                "C = " + String.valueOf(C),
-                                "D = " + String.valueOf(D),
-                                "E = " + String.valueOf(E),
-                        };
-
-                        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.linearLayout_sonuclariGoster);
-                        linearLayout.setOrientation(LinearLayout.VERTICAL);
-
-                        TextView textView1 = new TextView(PostActivity.this);
-                        textView1.setText("Bu soru " + String.valueOf(toplam) + " defa çözüldü.");
-                        textView1.setTextAppearance(R.style.textView);
-                        textView1.setBackgroundColor(Color.WHITE);
-                        textView1.setTextColor(Color.BLACK);
-                        textView1.setPadding(5, 5, 5, 5);
-                        textView1.setGravity(View.TEXT_ALIGNMENT_CENTER);
-                        linearLayout.addView(textView1);
-
-                        for (int i = 0; i < textArray.length; i++) {
-                            TextView textView = new TextView(PostActivity.this);
-                            if (d_cevap.equals(xData[i]))
-                                textView.setTextColor(Color.GREEN);
-                            else
-                                textView.setTextColor(Color.RED);
-                            yuzde = (100 * yData[i]) / toplam;
-                            textView.setText(textArray[i]);
-                            textView.setTextAppearance(R.style.textView);
-                            textView.setBackgroundColor(Color.WHITE);
-                            textView.setGravity(View.TEXT_ALIGNMENT_CENTER);
-                            linearLayout.addView(textView);
-                        }
-                        */
 
                     }
                 }

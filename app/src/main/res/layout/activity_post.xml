@@ -7,6 +7,9 @@
     android:layout_height="match_parent"
     tools:context=".PostActivity">
 
+
+
+
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
@@ -14,6 +17,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
+
+
+
 
         <LinearLayout
             android:id="@+id/linearLayout2"
@@ -51,17 +57,12 @@
                 android:orientation="vertical"
                 app:layout_constraintTop_toBottomOf="@+id/postToolbar">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:id="@+id/realTime"/>
-
                 <ImageView
                     android:id="@+id/ImageView_post_image"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="0dp"
-                    android:layout_margin="0dp"
+                    android:padding="3dp"
+                    android:layout_margin="5dp"
                     android:adjustViewBounds="true"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -169,5 +170,7 @@
 
 
     </ScrollView>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -33,6 +33,8 @@ import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -141,6 +143,15 @@ public class AddPost extends AppCompatActivity {
         userMap.put("postUnic_autoIncrement", postUnic_autoIncrement_int+1);
         //userMap.put("postUnic_autoIncrement", FieldValue.increment(1));
         userMap.put("time", FieldValue.serverTimestamp());
+
+
+        Date now = new Date();
+        long timestamp = now.getTime();
+
+        Toast.makeText(getApplicationContext(), String.valueOf(timestamp), Toast.LENGTH_SHORT).show();
+
+
+        userMap.put("time1", timestamp);
         mFirestore.collection("Posts").document().set(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
@@ -158,8 +169,9 @@ public class AddPost extends AppCompatActivity {
                     dersSoruGuncelle.update("soru_sayisi", FieldValue.increment(1));
 
                     Intent loginIntent = new Intent(AddPost.this, MainActivity.class);
-                    finish();
+
                     startActivity(loginIntent);
+                    finish();
                 }
             }
         });
@@ -169,7 +181,13 @@ public class AddPost extends AppCompatActivity {
     public void resimYukle() {
         String user_id = mAuth.getCurrentUser().getUid();
         String uniqueString = UUID.randomUUID().toString();
-        str = FirebaseStorage.getInstance().getReference().child(dersID).child(uniqueString+".jpg");
+        int year = Calendar.getInstance().get(Calendar.YEAR);
+        int month = Calendar.getInstance().get(Calendar.MONTH) +1;
+
+        str = FirebaseStorage.getInstance().getReference()
+                .child(String.valueOf(year))
+                .child(String.valueOf(month))
+                .child(uniqueString+".jpg");
 
         str.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
             @Override

@@ -54,44 +54,12 @@ public class KonularActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(getDersName);
         getSupportActionBar().setIcon(R.drawable.icon_setting);
 
-
-
         mAuth = FirebaseAuth.getInstance();
         mFirestore = FirebaseFirestore.getInstance();
         //userID = mAuth.getCurrentUser().getUid();
         recycler();
-        //listView();
     }
 
-    private void listView() {
-        List<String> dersName = new ArrayList<String>();
-        List<String> ders_id = new ArrayList<>();
-        mFirestore.collection("Menuler").whereEqualTo("dersID", dersID).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        String name = document.get("menu").toString();
-                        String ss = document.get("soru_sayisi").toString();
-                        ders_id.add(document.getId());
-                        dersName.add(name +" "+ ss);
-                    }
-                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(KonularActivity.this, android.R.layout.simple_list_item_1, android.R.id.text1, dersName);
-                    listViewKonular.setAdapter(adapter);
-                    listViewKonular.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            Intent konularActivity = new Intent(KonularActivity.this, PostActivity.class);
-                            konularActivity.putExtra("dersID", dersID);
-                            konularActivity.putExtra("konuID", ders_id.get(position));
-                            konularActivity.putExtra("konuName", dersName.get(position));
-                            startActivity(konularActivity);
-                        }
-                    });
-                }
-            }
-        });
-    }
 
     private void recycler() {
 
@@ -126,7 +94,8 @@ public class KonularActivity extends AppCompatActivity {
         clickListener = new RecyclerMenuAdapter.RecyclerViewClickListener() {
             @Override
             public void onClick(View v, int position) {
-                Intent konularActivity = new Intent(KonularActivity.this, PostActivity.class);
+                //Intent konularActivity = new Intent(KonularActivity.this, PostActivity.class);
+                Intent konularActivity = new Intent(KonularActivity.this, PostListActivity.class);
                 konularActivity.putExtra("dersID", dersID);
                 konularActivity.putExtra("konuID", dersler.get(position).getDersID());
                 konularActivity.putExtra("dersName", getDersName);

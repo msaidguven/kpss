@@ -24,7 +24,7 @@
         android:title="Düzenle" />
 
     <item
-        android:id="@+id/menu_addCategory"
+        android:id="@+id/menu_deletePost"
         android:icon="@drawable/icon_setting"
         android:title="Sil" />
 

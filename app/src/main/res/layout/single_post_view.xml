@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PostViewActivity">
+
+    <LinearLayout
+        android:id="@+id/LinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/ImageView_post_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="3dp"
+        android:layout_margin="5dp"
+        android:adjustViewBounds="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="parent"
+        tools:srcCompat="@tools:sample/avatars" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/secenkA"
+                android:layout_width="wrap_content"
+                android:layout_height="70dp"
+                android:layout_weight="1"
+                android:onClick="secenekClick"
+                android:padding="15dp"
+                android:background="@drawable/bg_menu3"
+                android:text="A" />
+
+            <Button
+                android:id="@+id/secenkB"
+                android:text="B"
+                android:onClick="secenekClick"
+                android:layout_weight="1"
+                android:padding="15dp"
+                android:layout_width="wrap_content"
+                android:background="@drawable/bg_menu3"
+                android:layout_height="70dp"/>
+
+            <Button
+                android:id="@+id/secenkC"
+                android:text="C"
+                android:onClick="secenekClick"
+                android:layout_weight="1"
+                android:padding="15dp"
+                android:layout_width="wrap_content"
+                android:background="@drawable/bg_menu3"
+                android:layout_height="70dp"/>
+
+            <Button
+                android:id="@+id/secenkD"
+                android:text="D"
+                android:onClick="secenekClick"
+                android:layout_weight="1"
+                android:padding="15dp"
+                android:layout_width="wrap_content"
+                android:background="@drawable/bg_menu3"
+                android:layout_height="70dp"/>
+
+            <Button
+                android:id="@+id/secenkE"
+                android:text="E"
+                android:onClick="secenekClick"
+                android:layout_weight="1"
+                android:padding="15dp"
+                android:layout_width="wrap_content"
+                android:background="@drawable/bg_menu3"
+                android:layout_height="70dp"/>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
