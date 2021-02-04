@@ -42,7 +42,6 @@ public class SettingsActivity extends AppCompatActivity {
     private Button settingsBtn;
     private EditText settingsName;
     private CircleImageView settingsImage;
-    private DatabaseReference mDatabase;
     private Uri imageUri = null;
     private Boolean Ischeck = false;
     private ProgressDialog settingsProgress;
@@ -184,7 +183,6 @@ public class SettingsActivity extends AppCompatActivity {
                         userUpdateMap.put("image", newUri);
                         isimGuncelle();
                         resimGuncelle(newUri);
-
                     }
                 });
             }

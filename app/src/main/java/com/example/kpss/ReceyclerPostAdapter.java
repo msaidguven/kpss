@@ -20,9 +20,9 @@ import java.util.List;
 
 public class ReceyclerPostAdapter extends RecyclerView.Adapter<ReceyclerPostAdapter.MyViewHolder> {
     private Context mContext;
-    private List<Post> mData;
+    private List<PostModel> mData;
 
-    public ReceyclerPostAdapter(Context mContext, List<Post> mData) {
+    public ReceyclerPostAdapter(Context mContext, List<PostModel> mData) {
         this.mContext = mContext;
         this.mData = mData;
     }
@@ -56,7 +56,7 @@ public class ReceyclerPostAdapter extends RecyclerView.Adapter<ReceyclerPostAdap
                 intent.putExtra("postID", mData.get(position).getPostID());
                 intent.putExtra("time", mData.get(position).getTime());
                 intent.putExtra("time1", mData.get(position).getTime1());
-                intent.putExtra("dersID", mData.get(position).getPostLessonID());
+                intent.putExtra("dersID", mData.get(position).getDersID());
                 intent.putExtra("konuID", mData.get(position).getKonuID());
                 intent.putExtra("konuName", mData.get(position).getKonuName());
                 intent.putExtra("dersName", mData.get(position).getDersName());

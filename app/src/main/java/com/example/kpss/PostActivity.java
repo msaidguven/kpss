@@ -403,7 +403,6 @@ public class PostActivity extends AppCompatActivity {
 
         post_setting.setVisibility(View.VISIBLE);
 
-
     }
 
 

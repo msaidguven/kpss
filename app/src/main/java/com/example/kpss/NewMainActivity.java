@@ -30,7 +30,7 @@ public class NewMainActivity extends AppCompatActivity {
     private boolean isScrolling;
     private boolean isLastItemReached;
     private GridLayoutManager gridLayoutManager;
-    private List<Post> postList;
+    private List<PostModel> postList;
 
 
     RecyclerView recyclerView;
@@ -44,6 +44,7 @@ public class NewMainActivity extends AppCompatActivity {
     String userName;
     String user_image;
     String postID, post_image;
+    private String d_cevap;
     private String time;
     private String time1;
     private String konuID;
@@ -85,9 +86,8 @@ public class NewMainActivity extends AppCompatActivity {
     }
 
     private void getData() {
-
+        /*
         progressBar.setVisibility(View.VISIBLE);
-
         mFirestore.collection("Posts")
                 .orderBy("time", Query.Direction.DESCENDING)
                 .limit(limit)
@@ -102,25 +102,19 @@ public class NewMainActivity extends AppCompatActivity {
                         postID = document.getId();
                         postList.add(new Post(postID, post_image));
                     }
-
-
                     Toast.makeText(getApplicationContext(), "Next page loaded", Toast.LENGTH_SHORT).show();
-
                     ReceyclerPostAdapter myAdapter = new ReceyclerPostAdapter(NewMainActivity.this, postList);
-
                     myAdapter.notifyDataSetChanged();
-
                     Toast.makeText(getApplicationContext(), String.valueOf(task.getResult().size()), Toast.LENGTH_SHORT).show();
-
                     if (task.getResult().size() < limit) {
                         isLastItemReached = true;
                         progressBar.setVisibility(View.GONE);
                     }
                     lastVisible = task.getResult().getDocuments().get(task.getResult().size() - 1);
                 }
-
             }
         });
+         */
     }
 
 
@@ -140,9 +134,10 @@ public class NewMainActivity extends AppCompatActivity {
                         post_image = document.get("post_image").toString();
                         postID = document.getId();
                         time = document.get("time").toString();
+                        d_cevap = document.get("d_cevap").toString();
                         time1 = document.get("time1") == null ? "0" : document.get("time1").toString();
                         konuID = document.get("konuID").toString();
-                        postList.add(new Post(postID, post_image, time, time1, konuID));
+                        postList.add(new PostModel(postID, post_image, time, time1, konuID, d_cevap));
                     }
 
                     progressBar.setVisibility(View.GONE);
@@ -187,9 +182,10 @@ public class NewMainActivity extends AppCompatActivity {
                                                 post_image = document.get("post_image").toString();
                                                 postID = document.getId();
                                                 time = document.get("time").toString();
+                                                d_cevap = document.get("d_cevap").toString();
                                                 time1 = document.get("time1") == null ? "0" : document.get("time1").toString();
                                                 konuID = document.get("konuID").toString();
-                                                postList.add(new Post(postID, post_image, time, time1, konuID));
+                                                postList.add(new PostModel(postID, post_image, time, time1, konuID, d_cevap));
                                             }
 
                                             myAdapter.notifyDataSetChanged();

@@ -14,6 +14,8 @@ public class Post {
     private String konuID;
     private String time;
     private String time1;
+    private String d_cevap;
+    private int A,B,C,D,E;
 
 
 
@@ -31,12 +33,28 @@ public class Post {
         this.time = time;
     }
 
-    public Post(String postID, String postImage, String time, String time1, String konuID) {
+    public Post(String postID, String postImage, String time, String time1, String konuID, String d_cevap) {
         this.postID = postID;
         this.postImage = postImage;
         this.time = time;
         this.time1 = time1;
         this.konuID = konuID;
+        this.d_cevap = d_cevap;
+    }
+
+    public Post(String postID, String postImage, String userID, String dersID, String konuID, String time, int a, int b, int c, int d, int e, String d_cevap) {
+        this.postID = postID;
+        this.postImage = postImage;
+        this.userID = userID;
+        this.dersID = dersID;
+        this.konuID = konuID;
+        this.time = time;
+        A = a;
+        B = b;
+        C = c;
+        D = d;
+        E = e;
+        this.d_cevap = d_cevap;
     }
 
 /*
@@ -136,4 +154,11 @@ public class Post {
     }
 
 
+    public String getD_cevap() {
+        return d_cevap;
+    }
+
+    public void setD_cevap(String d_cevap) {
+        this.d_cevap = d_cevap;
+    }
 }

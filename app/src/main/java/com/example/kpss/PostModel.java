@@ -31,16 +31,30 @@ public class PostModel {
     private String userID;
     private String dersID;
     private String konuID;
-    private Timestamp time;
+    private String time;
     private int A,B,C,D,E;
     private String d_cevap;
+    private String time1;
+
+    private String dersName;
+    private String konuName;
+
 
     public PostModel(String postID, String postImage) {
         this.postID = postID;
         this.postImage = postImage;
     }
 
-    public PostModel(String postID, String postImage, String userID, String dersID, String konuID, Timestamp time, int a, int b, int c, int d, int e, String d_cevap) {
+    public PostModel(String postID, String postImage, String time, String time1, String konuID, String d_cevap) {
+        this.postID = postID;
+        this.postImage = postImage;
+        this.time = time;
+        this.time1 = time1;
+        this.konuID = konuID;
+        this.d_cevap = d_cevap;
+    }
+
+    public PostModel(String postID, String postImage, String userID, String dersID, String konuID, String time, int a, int b, int c, int d, int e, String d_cevap) {
         this.postID = postID;
         this.postImage = postImage;
         this.userID = userID;
@@ -95,11 +109,11 @@ public class PostModel {
         this.konuID = konuID;
     }
 
-    public Timestamp getTime() {
+    public String getTime() {
         return time;
     }
 
-    public void setTime(Timestamp time) {
+    public void setTime(String time) {
         this.time = time;
     }
 
@@ -151,8 +165,29 @@ public class PostModel {
         this.d_cevap = d_cevap;
     }
 
+    public String getTime1() {
+        return time1;
+    }
 
+    public void setTime1(String time1) {
+        this.time1 = time1;
+    }
 
+    public String getDersName() {
+        return dersName;
+    }
+
+    public void setDersName(String dersName) {
+        this.dersName = dersName;
+    }
+
+    public String getKonuName() {
+        return konuName;
+    }
+
+    public void setKonuName(String konuName) {
+        this.konuName = konuName;
+    }
 }
 
 

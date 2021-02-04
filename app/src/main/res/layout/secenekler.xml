@@ -3,58 +3,58 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-
     android:orientation="horizontal">
 
-    <Button
-        android:id="@+id/secenkA"
-        android:layout_width="wrap_content"
-        android:layout_height="70dp"
+    <ImageView
+        android:id="@+id/A"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
         android:layout_weight="1"
         android:onClick="secenekClick"
-        android:padding="15dp"
         android:background="@drawable/bg_menu3"
-        android:text="A" />
+        android:src="@drawable/ic_a_foreground"
+        android:layout_margin="4dp"/>
 
-    <Button
-        android:id="@+id/secenkB"
-        android:text="B"
-        android:onClick="secenekClick"
-        android:layout_weight="1"
-        android:padding="15dp"
-        android:layout_width="wrap_content"
-        android:background="@drawable/bg_menu3"
-        android:layout_height="70dp"/>
 
-    <Button
-        android:id="@+id/secenkC"
-        android:text="C"
-        android:onClick="secenekClick"
+    <ImageView
+        android:id="@+id/B"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
         android:layout_weight="1"
-        android:padding="15dp"
-        android:layout_width="wrap_content"
+        android:onClick="secenekClick"
         android:background="@drawable/bg_menu3"
-        android:layout_height="70dp"/>
+        android:src="@drawable/ic_b_foreground"
+        android:layout_margin="4dp"/>
 
-    <Button
-        android:id="@+id/secenkD"
-        android:text="D"
+    <ImageView
+        android:id="@+id/C"
         android:onClick="secenekClick"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
         android:layout_weight="1"
-        android:padding="15dp"
-        android:layout_width="wrap_content"
         android:background="@drawable/bg_menu3"
-        android:layout_height="70dp"/>
+        android:src="@drawable/ic_c_foreground"
+        android:layout_margin="4dp"/>
 
-    <Button
-        android:id="@+id/secenkE"
-        android:text="E"
+    <ImageView
+        android:id="@+id/D"
         android:onClick="secenekClick"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
         android:layout_weight="1"
-        android:padding="15dp"
-        android:layout_width="wrap_content"
         android:background="@drawable/bg_menu3"
-        android:layout_height="70dp"/>
+        android:src="@drawable/ic_d_foreground"
+        android:layout_margin="4dp"/>
+
+    <ImageView
+        android:id="@+id/E"
+        android:onClick="secenekClick"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_weight="1"
+        android:background="@drawable/bg_menu3"
+        android:src="@drawable/ic_e_foreground"
+        android:layout_margin="4dp"/>
 
 
 </LinearLayout>
