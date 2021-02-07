@@ -35,7 +35,7 @@ public class NewMainActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
     ProgressBar progressBar;
-    ArrayList<Post> dataArrayList = new ArrayList<>();
+    ArrayList<PostModel> dataArrayList = new ArrayList<>();
     MainAdapter adapter;
     int startLimit = 18, limit = 10;
 
@@ -69,20 +69,6 @@ public class NewMainActivity extends AppCompatActivity {
         mFirestore = FirebaseFirestore.getInstance();
 
         recycler();
-
-/*
-        nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
-            @Override
-            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                if (isLastItemReached == false) {
-                    if (scrollY == v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()) {
-                            getData();
-                    }
-                }
-            }
-        });
-*/
-
     }
 
     private void getData() {

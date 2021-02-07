@@ -24,4 +24,6 @@
             android:layout_height="130dp"
             android:adjustViewBounds="true"/>
     </LinearLayout>
+
+
 </androidx.cardview.widget.CardView>

@@ -1,114 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".NewMainActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/mainToolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:elevation="5dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:popupTheme="@style/popopTheme"
+        app:theme="@style/toolbarTheme">
+
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imageView"
+            android:layout_width="33dp"
+            android:layout_height="33dp"
+            android:layout_gravity="left"
+            android:layout_marginHorizontal="5dp"
+            android:layout_marginVertical="5dp"
+            android:src="@drawable/user" />
+
+    </androidx.appcompat.widget.Toolbar>
+
+
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        tools:context=".NewMainActivity">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/mainToolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:elevation="5dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:popupTheme="@style/popopTheme"
-            app:theme="@style/toolbarTheme">
-
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/imageView"
-                android:layout_width="33dp"
-                android:layout_height="33dp"
-                android:layout_gravity="left"
-                android:layout_marginHorizontal="5dp"
-                android:layout_marginVertical="5dp"
-                android:src="@drawable/user" />
-
-        </androidx.appcompat.widget.Toolbar>
-
+        app:layout_constraintTop_toBottomOf="@+id/mainToolbar"
+        tools:layout_editor_absoluteX="13dp">
 
         <LinearLayout
-            android:id="@+id/linearLayout3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:orientation="horizontal"
             app:layout_constraintTop_toBottomOf="@+id/mainToolbar"
             tools:layout_editor_absoluteX="13dp">
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/btnLogin"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintTop_toBottomOf="@+id/mainToolbar"
-                tools:layout_editor_absoluteX="13dp">
+                android:layout_gravity="left"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Giriş Yap" />
 
-                <TextView
-                    android:id="@+id/btnLogin"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="left"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="Giriş Yap" />
+            <TextView
+                android:id="@+id/btnRegister"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Kayıt Ol" />
 
-                <TextView
-                    android:id="@+id/btnRegister"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="left"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="Kayıt Ol" />
-
-                <TextView
-                    android:id="@+id/textView_userName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="left"
-                    android:layout_weight="1" />
-
-            </LinearLayout>
-
+            <TextView
+                android:id="@+id/textView_userName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_weight="1" />
 
         </LinearLayout>
 
+        <include
+            layout="@layout/chip_menu"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="84dp"
-            android:layout_marginBottom="10dp"
-            android:nestedScrollingEnabled="false"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintTop_toTopOf="@+id/linearLayout3"
-            tools:listitem="@layout/cardview_item" />
+    </LinearLayout>
 
-        <ProgressBar
-            android:paddingTop="-10dp"
-            android:id="@+id/progress_bar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/recycler_view" />
+    <include
+        android:id="@+id/includeMainRecycler"
+        layout="@layout/recycler_view_cards"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-        <!--
-                <ListView
-                    android:id="@+id/listViewDersler"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
-                    -->
+    <!--
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="140dp"
+        android:layout_marginBottom="30dp"
+        android:nestedScrollingEnabled="false"
+        app:layout_constraintTop_toTopOf="@+id/linearLayout3"
+        tools:listitem="@layout/cardview_item" />
+-->
 
-        <!--
-        <include layout="@layout/menu"/>
-        -->
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/includeMainRecycler" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
 
 

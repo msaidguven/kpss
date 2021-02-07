@@ -15,7 +15,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Kpss">
-        <activity android:name=".NewMainActivity"></activity>
+        <activity android:name=".DersActivity"></activity>
+        <activity android:name=".NewMainActivity" />
         <activity android:name=".PostViewActivity" />
         <activity android:name=".PostListActivity" />
         <activity android:name=".SonuclarActivity" />

@@ -124,6 +124,7 @@ public class PostActivity extends AppCompatActivity {
         mFirestore = FirebaseFirestore.getInstance();
 
         Intent intent = getIntent();
+        postID = intent.getStringExtra("postID");
         dersID = intent.getStringExtra("dersID");
         konuID = intent.getStringExtra("konuID");
         getKonuName = intent.getStringExtra("konuName");
@@ -279,11 +280,11 @@ public class PostActivity extends AppCompatActivity {
         buttonOncekiSoru = findViewById(R.id.buttonOncekiSoru);
         buttonSonrakiSoru = findViewById(R.id.buttonSonrakiSoru);
 
-        btnA = findViewById(R.id.secenkA);
-        btnB = findViewById(R.id.secenkB);
-        btnC = findViewById(R.id.secenkC);
-        btnD = findViewById(R.id.secenkD);
-        btnE = findViewById(R.id.secenkE);
+        btnA = findViewById(R.id.A);
+        btnB = findViewById(R.id.B);
+        btnC = findViewById(R.id.C);
+        btnD = findViewById(R.id.D);
+        btnE = findViewById(R.id.E);
 
 
         linearLayout_uyeSoruAnaliz = findViewById(R.id.linearLayout_uyeSoruAnaliz);

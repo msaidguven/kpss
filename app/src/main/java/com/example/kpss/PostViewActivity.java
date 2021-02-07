@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.BitmapRegionDecoder;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -112,6 +113,7 @@ public class PostViewActivity extends AppCompatActivity {
     double toplam;
 
     int startAfter = 0;
+    long time1;
 
     private int[] yData;
     private String[] xData = new String[]{"A", "B", "C", "D", "E"};
@@ -142,7 +144,8 @@ public class PostViewActivity extends AppCompatActivity {
         postID = intent.getStringExtra("postID");
         getKonuName = intent.getStringExtra("konuName");
         getDersName = intent.getStringExtra("dersName");
-        menuSoruSayisi = intent.getIntExtra("menuSoruSayisi", menuSoruSayisi);
+        menuSoruSayisi = intent.getIntExtra("postUnic_autoIncrement", menuSoruSayisi);
+        time1 = intent.getLongExtra("time1", time1);
 
         init();
         soruGetir();
@@ -170,7 +173,7 @@ public class PostViewActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Son Sorudasın", Toast.LENGTH_SHORT).show();
                 } else {
                     startAfter++;
-                    soruGetir();
+                    yeniSoru();
                 }
                 //Intent intent = getIntent();
                 //finish();
@@ -222,8 +225,9 @@ public class PostViewActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
-
                     postID = document.getId();
+                    dersID = document.getString("dersID");
+                    konuID = document.getString("konuID");
                     post_image = document.getString("post_image");
                     d_cevap = document.getString("d_cevap");
 
@@ -244,12 +248,58 @@ public class PostViewActivity extends AppCompatActivity {
         dialog.dismiss();
     }
 
+    private void yeniSoru() {
+
+        mFirestore.collection("Posts")
+                .whereEqualTo("konuID", konuID)
+                .orderBy("time1")
+                //.startAt(uyeninCozduguSonSoru + 1)
+                .startAfter(time1) //acaba aynı şey mi yukardaki ile
+                .limit(1)
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value,
+                                        @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
+                        }
+                        Toast.makeText(getApplicationContext(), String.valueOf(value.size()), Toast.LENGTH_SHORT).show();
+
+                        if (value.size() == 0) {
+                            Toast.makeText(getApplicationContext(), "Soru Bulunamadı", Toast.LENGTH_SHORT).show();
+                        } else {
+                            for (QueryDocumentSnapshot doc : value) {
+                                postID = doc.getId();
+                                dersID = doc.getString("dersID");
+                                konuID = doc.getString("konuID");
+                                post_image = doc.getString("post_image");
+                                d_cevap = doc.getString("d_cevap");
+                                A = Integer.parseInt(doc.get("A").toString());
+                                B = Integer.parseInt(doc.get("B").toString());
+                                C = Integer.parseInt(doc.get("C").toString());
+                                D = Integer.parseInt(doc.get("D").toString());
+                                E = Integer.parseInt(doc.get("E").toString());
+                                Picasso.get().load(post_image).into(ImageView_post_image);
+                                uyeninCozduguSonSoru = Integer.parseInt(doc.get("postUnic_autoIncrement").toString());
+                                time1 = Long.parseLong(doc.get("time1").toString());
+
+                                yData = new int[]{A, B, C, D, E};
+                                setupPieChart();
+                                toplam = A + B + C + D + E;
+
+                            }
+                            dialog.dismiss();
+
+                        }
+                    }
+                });
+    }
+
 
     private void init() {
 
         pieChart = findViewById(R.id.pie_chart);
         pieChart1 = findViewById(R.id.pie_chart1);
-
 
         ImageView_post_image = findViewById(R.id.ImageView_post_image);
         fragment_container_view_tag = findViewById(R.id.fragment_container_view_tag);
@@ -264,19 +314,17 @@ public class PostViewActivity extends AppCompatActivity {
         buttonOncekiSoru = findViewById(R.id.buttonOncekiSoru);
         buttonSonrakiSoru = findViewById(R.id.buttonSonrakiSoru);
 
-        btnA = findViewById(R.id.secenkA);
-        btnB = findViewById(R.id.secenkB);
-        btnC = findViewById(R.id.secenkC);
-        btnD = findViewById(R.id.secenkD);
-        btnE = findViewById(R.id.secenkE);
-
+        btnA = findViewById(R.id.A);
+        btnB = findViewById(R.id.B);
+        btnC = findViewById(R.id.C);
+        btnD = findViewById(R.id.D);
+        btnE = findViewById(R.id.E);
 
         linearLayout_uyeSoruAnaliz = findViewById(R.id.linearLayout_uyeSoruAnaliz);
 
         setSupportActionBar(postToolbar);
-        getSupportActionBar().setTitle(getDersName);
-        getSupportActionBar().setIcon(R.drawable.icon_setting);
-        getSupportActionBar().setSubtitle(getKonuName);
+        getSupportActionBar().setTitle(getKonuName);
+        getSupportActionBar().setSubtitle(getDersName);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
@@ -291,26 +339,32 @@ public class PostViewActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         super.onOptionsItemSelected(item);
 
+        /*
         dialog.setTitle("Lütfen Bekleyin");
         dialog.setMessage("Siliniyor");
         dialog.closeOptionsMenu();
         dialog.setOnDismissListener(DialogInterface::cancel);
         dialog.show();
-
-        /*
-        storageReference = FirebaseStorage.getInstance().getReference()
-        storageReference = mFirebaseStorage.getReferenceFromUrl(mImageUrl);
-        StorageReference photoRef = mFirebaseStorage.getReferenceFromUrl(mImageUrl);
 */
 
-
         if (item.getItemId() == R.id.menu_deletePost) {
+
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setCancelable(false);
             builder.setMessage("Bu soruyu silmek istiyor musunuz?");
+
             builder.setPositiveButton("EVET", new DialogInterface.OnClickListener() {
+
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+
+                    ProgressDialog dialog1 = new ProgressDialog(PostViewActivity.this);
+                    dialog1.setTitle("Lütfen Bekleyin");
+                    dialog1.setMessage("Siliniyor");
+                    dialog1.closeOptionsMenu();
+                    dialog1.setOnDismissListener(DialogInterface::cancel);
+                    dialog1.show();
+
                     FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
                     StorageReference storageReference = firebaseStorage.getReferenceFromUrl(post_image);
                     storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -321,6 +375,13 @@ public class PostViewActivity extends AppCompatActivity {
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
+
+                                            DocumentReference konuSoruGuncelle = mFirestore.collection("Menuler").document(konuID);
+                                            konuSoruGuncelle.update("soru_sayisi", FieldValue.increment(-1));
+
+                                            DocumentReference dersSoruGuncelle = mFirestore.collection("Menuler").document(dersID);
+                                            dersSoruGuncelle.update("soru_sayisi", FieldValue.increment(-1));
+
                                             dialog.dismiss();
                                             Toast.makeText(getApplicationContext(), "Soru Silindi", Toast.LENGTH_SHORT);
                                             Intent intent = new Intent(PostViewActivity.this, MainActivity.class);
@@ -331,8 +392,8 @@ public class PostViewActivity extends AppCompatActivity {
                                     .addOnFailureListener(new OnFailureListener() {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
-                                            Toast.makeText(getApplicationContext(), "Error deleting document", Toast.LENGTH_SHORT).show();
                                             dialog.dismiss();
+                                            Toast.makeText(getApplicationContext(), "Error deleting document", Toast.LENGTH_SHORT).show();
                                         }
                                     });
                         }
@@ -348,15 +409,12 @@ public class PostViewActivity extends AppCompatActivity {
             });
             AlertDialog alert = builder.create();
             alert.show();
-
-
         }
 
         if (item.getItemId() == R.id.menu_addPost) {
             //Intent settingsIntent = new Intent(MainActivity.this, AddPost.class);
             //startActivity(settingsIntent);
         }
-
         return true;
     }
 
@@ -426,10 +484,15 @@ public class PostViewActivity extends AppCompatActivity {
         });
     }
 
-
     public void secenekClick(View v) {
         Button vee = (Button) v;
         btn_getText = vee.getText().toString();
+
+        btnA.setEnabled(false);
+        btnB.setEnabled(false);
+        btnC.setEnabled(false);
+        btnD.setEnabled(false);
+        btnE.setEnabled(false);
 
         if (btn_getText.equals(d_cevap)) {
             Toast.makeText(getApplicationContext(), "Tebrikler doğru cevap", Toast.LENGTH_SHORT).show();
@@ -450,17 +513,11 @@ public class PostViewActivity extends AppCompatActivity {
             istatistikleriKaydet();
         }
 
-        btnA.setEnabled(false);
-        btnB.setEnabled(false);
-        btnC.setEnabled(false);
-        btnD.setEnabled(false);
-        btnE.setEnabled(false);
 
         DocumentReference postCevap_increment = mFirestore.collection("Posts").document(postID);
         postCevap_increment.update(btn_getText, FieldValue.increment(1));
 
         post_setting.setVisibility(View.VISIBLE);
-
 
     }
 

@@ -2,6 +2,7 @@ package com.example.kpss;
 
 import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
@@ -140,18 +142,14 @@ public class AddPost extends AppCompatActivity {
         userMap.put("D", 0);
         userMap.put("E", 0);
         //userMap.put("unique", System.currentTimeMillis());
-        userMap.put("postUnic_autoIncrement", postUnic_autoIncrement_int+1);
-        //userMap.put("postUnic_autoIncrement", FieldValue.increment(1));
+        userMap.put("postUnic_autoIncrement", FieldValue.increment(1));
         userMap.put("time", FieldValue.serverTimestamp());
+        //Date now = new Date();
+        //long timestamp = now.getTime();
+        //Toast.makeText(getApplicationContext(), String.valueOf(timestamp), Toast.LENGTH_SHORT).show();
+        userMap.put("time1", new Date().getTime());
 
 
-        Date now = new Date();
-        long timestamp = now.getTime();
-
-        Toast.makeText(getApplicationContext(), String.valueOf(timestamp), Toast.LENGTH_SHORT).show();
-
-
-        userMap.put("time1", timestamp);
         mFirestore.collection("Posts").document().set(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
@@ -218,7 +216,9 @@ public class AddPost extends AppCompatActivity {
     }
 
     public void dersListele() {
-        mFirestore.collection("Menuler").whereEqualTo("dersID", "0").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        mFirestore.collection("Menuler").whereEqualTo("dersID", "0")
+                .orderBy("siralama")
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
@@ -269,7 +269,9 @@ public class AddPost extends AppCompatActivity {
 
 
     public void konuListele(String documanID) {
-        mFirestore.collection("Menuler").whereEqualTo("dersID", documanID).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        mFirestore.collection("Menuler").whereEqualTo("dersID", documanID)
+                .orderBy("siralama")
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
@@ -347,6 +349,14 @@ public class AddPost extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        Intent settingsIntent = new Intent(AddPost.this, MainActivity.class);
+        startActivity(settingsIntent);
+        finish();
     }
 
 }

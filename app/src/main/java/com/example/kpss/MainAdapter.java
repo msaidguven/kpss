@@ -20,10 +20,10 @@ import java.util.List;
 
 public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
 
-    private ArrayList<Post> dataArrayList;
+    private ArrayList<PostModel> dataArrayList;
     private Activity activity;
 
-    public MainAdapter(Activity activity, ArrayList<Post> dataArrayList){
+    public MainAdapter(Activity activity, ArrayList<PostModel> dataArrayList){
         this.activity=activity;
         this.dataArrayList=dataArrayList;
     }
@@ -38,7 +38,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Post mPost = dataArrayList.get(position);
+        PostModel mPost = dataArrayList.get(position);
 
         holder.img_post_thumbnail.setAnimation(AnimationUtils.loadAnimation(activity, R.anim.fade_scale_animation));
 

@@ -54,6 +54,16 @@ public class PostModel {
         this.d_cevap = d_cevap;
     }
 
+    public PostModel(String postID, String postImage, String time, String time1, String konuID, String d_cevap, String dersName) {
+        this.postID = postID;
+        this.postImage = postImage;
+        this.time = time;
+        this.time1 = time1;
+        this.konuID = konuID;
+        this.d_cevap = d_cevap;
+        this.dersName = dersName;
+    }
+
     public PostModel(String postID, String postImage, String userID, String dersID, String konuID, String time, int a, int b, int c, int d, int e, String d_cevap) {
         this.postID = postID;
         this.postImage = postImage;

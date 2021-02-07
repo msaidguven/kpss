@@ -41,35 +41,28 @@ public class ReceyclerPostAdapter extends RecyclerView.Adapter<ReceyclerPostAdap
         /*
         holder.container.setAnimation(AnimationUtils.loadAnimation(mContext, R.anim.fade_scale_animation));
         holder.cardView.setAnimation(AnimationUtils.loadAnimation(mContext, R.anim.fade_scale_animation));
-
-         */
         holder.img_post_thumbnail.setAnimation(AnimationUtils.loadAnimation(mContext, R.anim.fade_scale_animation));
-
+*/
         Picasso.get().load(mData.get(position).getPostImage()).into(holder.img_post_thumbnail);
         //AltexImageDownloader.writeToDisk(getApplicationContext(), "resimUrl", "isim");
-
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext, PostListActivity.class);
+                Intent intent = new Intent(mContext, PostViewActivity.class);
                 intent.putExtra("postID", mData.get(position).getPostID());
                 intent.putExtra("time", mData.get(position).getTime());
                 intent.putExtra("time1", mData.get(position).getTime1());
                 intent.putExtra("dersID", mData.get(position).getDersID());
                 intent.putExtra("konuID", mData.get(position).getKonuID());
-                intent.putExtra("konuName", mData.get(position).getKonuName());
+                //intent.putExtra("konuName", mData.get(position).getKonuName());
                 intent.putExtra("dersName", mData.get(position).getDersName());
                 //intent.putExtra("dersName", getDersName);
-                //intent.putExtra("konuName", dersler.get(position).getDersName());
-                //intent.putExtra("menuSoruSayisi", dersler.get(position).getSoruSayisi());
-
+                //intent.putExtra("konuName", mData.get(position).getDersName());
                 mContext.startActivity(intent);
                 //((Activity) mContext).finish();
             }
         });
-
-
     }
 
     @Override

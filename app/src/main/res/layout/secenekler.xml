@@ -5,55 +5,50 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
-    <ImageView
+    <Button
+        android:text="A"
         android:id="@+id/A"
+        android:onClick="secenekClick"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_weight="1"
-        android:onClick="secenekClick"
-        android:background="@drawable/bg_menu3"
-        android:src="@drawable/ic_a_foreground"
         android:layout_margin="4dp"/>
 
 
-    <ImageView
+    <Button
+        android:text="B"
         android:id="@+id/B"
+        android:onClick="secenekClick"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_weight="1"
-        android:onClick="secenekClick"
-        android:background="@drawable/bg_menu3"
-        android:src="@drawable/ic_b_foreground"
         android:layout_margin="4dp"/>
 
-    <ImageView
+    <Button
+        android:text="C"
         android:id="@+id/C"
         android:onClick="secenekClick"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_weight="1"
-        android:background="@drawable/bg_menu3"
-        android:src="@drawable/ic_c_foreground"
         android:layout_margin="4dp"/>
 
-    <ImageView
+    <Button
+        android:text="D"
         android:id="@+id/D"
         android:onClick="secenekClick"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_weight="1"
-        android:background="@drawable/bg_menu3"
-        android:src="@drawable/ic_d_foreground"
         android:layout_margin="4dp"/>
 
-    <ImageView
+    <Button
+        android:text="E"
         android:id="@+id/E"
         android:onClick="secenekClick"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_weight="1"
-        android:background="@drawable/bg_menu3"
-        android:src="@drawable/ic_e_foreground"
         android:layout_margin="4dp"/>
 
 
