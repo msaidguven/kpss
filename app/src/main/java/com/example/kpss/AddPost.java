@@ -41,6 +41,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class AddPost extends AppCompatActivity {
 
     ArrayAdapter adp;
@@ -48,7 +50,7 @@ public class AddPost extends AppCompatActivity {
     Spinner spinner_ders;
     Spinner spinner_konu;
     String dCevap;
-    private ImageView postImage;
+    private CircleImageView postImage;
     private Button btnResimSec;
     private Button btn_soruEkle;
     private Boolean resim_Ischeck = false;
@@ -78,6 +80,17 @@ public class AddPost extends AppCompatActivity {
         dersListele();
         dCevap();
 
+
+        postImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ActivityCompat.requestPermissions(AddPost.this, new String[]{
+                        Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+                CropImage.activity()
+                        .setGuidelines(CropImageView.Guidelines.ON)
+                        .start(AddPost.this);
+            }
+        });
 
 
         btnResimSec.setOnClickListener(new View.OnClickListener() {

@@ -60,10 +60,15 @@ public class PostListActivity extends AppCompatActivity {
     String time;
     String time1;
     private int menuSoruSayisi;
+    private Button btnA, btnB, btnC, btnD, btnE;
+    private View post_setting;
+    private TextView textView_aciklama, textView_gosterge;
+
 
     private String vee_id;
     private ProgressDialog dialog;
     private Toolbar postToolbar;
+    String analizCevapIncrement;
 
 
 
@@ -83,16 +88,20 @@ public class PostListActivity extends AppCompatActivity {
         getDersName = intent.getStringExtra("dersName");
         menuSoruSayisi = intent.getIntExtra("menuSoruSayisi", menuSoruSayisi);
 
+
         ViewPager viewPager = findViewById(R.id.viewPager);
         postList = new ArrayList<>();
 
         postToolbar = findViewById(R.id.postToolbar);
 
+/*
+
+        postToolbar = findViewById(R.id.postToolbar);
         setSupportActionBar(postToolbar);
-        getSupportActionBar().setTitle("Türkçe");
-        getSupportActionBar().setIcon(R.drawable.icon_setting);
-        getSupportActionBar().setSubtitle("Dil Bilgisi");
+        getSupportActionBar().setTitle(getKonuName);
+        getSupportActionBar().setSubtitle(getDersName);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+*/
 
 
 /*
@@ -101,7 +110,6 @@ public class PostListActivity extends AppCompatActivity {
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
         String dateStr = sdf.format( timestamp);
 */
-
 
         mFirestore.collection("Posts")
                 .whereEqualTo("konuID", konuID)
@@ -118,7 +126,7 @@ public class PostListActivity extends AppCompatActivity {
                         d_cevap = document.get("d_cevap").toString();
                         time1 = document.get("time1") == null ? "0" : document.get("time1").toString();
                         konuID = document.get("konuID").toString();
-                        postList.add(new PostModel(postID, post_image, time, time1, konuID, d_cevap));
+                        postList.add(new PostModel(postID, post_image, time, time1, konuID, d_cevap, getDersName));
                     }
                     Toast.makeText(getApplicationContext(), String.valueOf(task.getResult().size()), Toast.LENGTH_SHORT).show();
                     ViewPagerAdapter adapter = new ViewPagerAdapter(PostListActivity.this, postList);
@@ -134,15 +142,56 @@ public class PostListActivity extends AppCompatActivity {
         Button vee = (Button) v;
         vee_id = vee.getText().toString();
 
+        post_setting = findViewById(R.id.post_setting);
+        post_setting = findViewById(R.id.post_setting);
+        textView_aciklama = findViewById(R.id.textView_aciklama);
+        textView_gosterge = findViewById(R.id.textView_gosterge);
 
-        Toast.makeText(getApplicationContext(), vee_id, Toast.LENGTH_SHORT).show();
-/*
+        Toast.makeText(getApplicationContext(), d_cevap, Toast.LENGTH_SHORT).show();
+
         if (vee_id.equals(d_cevap)){
             Toast.makeText(getApplicationContext(), vee_id, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "d_cevap", Toast.LENGTH_SHORT).show();
         }else {
-            Toast.makeText(getApplicationContext(), "yanlış", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "yanlış cevap", Toast.LENGTH_SHORT).show();
         }
-*/
+
+
+
+
+        if (btn_getText.equals(d_cevap)) {
+            Toast.makeText(getApplicationContext(), "Tebrikler doğru cevap", Toast.LENGTH_SHORT).show();
+            vee.setBackgroundColor(Color.GREEN);
+            textView_aciklama.setTextColor(Color.GREEN);
+            textView_aciklama.setText("Tebrikler doğru vecap verdiniz");
+            analizCevapIncrement = "dogru_sayisi";
+            istatistikleriKaydet();
+        } else if (d_cevap.equals("Bilinmiyor")) {
+            textView_aciklama.setTextColor(Color.BLUE);
+            textView_aciklama.setText("Bu soruya doğru cevap eklenmemiş. Çözüm ekleyerek doğru cevabın bulunmasına yardım edebilirsin.");
+        } else {
+            Toast.makeText(getApplicationContext(), "Yanlış cevap", Toast.LENGTH_SHORT).show();
+            vee.setBackgroundColor(Color.RED);
+            textView_aciklama.setTextColor(Color.RED);
+            textView_aciklama.setText("Yanlış cevap verdiniz. Doğru cevap " + d_cevap + " olacak.");
+            analizCevapIncrement = "yanlis_sayisi";
+            istatistikleriKaydet();
+        }
+
+
+
+
+        btnA = findViewById(R.id.A);
+        btnB = findViewById(R.id.B);
+        btnC = findViewById(R.id.C);
+        btnD = findViewById(R.id.D);
+        btnE = findViewById(R.id.E);
+
+        btnA.setEnabled(false);
+        btnB.setEnabled(false);
+        btnC.setEnabled(false);
+        btnD.setEnabled(false);
+        btnE.setEnabled(false);
 
 
 

@@ -40,8 +40,6 @@ public class ViewPagerAdapter extends PagerAdapter {
     private FirebaseAuth mAuth;
     private FirebaseFirestore mFirestore;
 
-    private Toolbar postToolbar;
-
     View post_setting;
 
     public ViewPagerAdapter(Context mContext, List<PostModel> mPostModel) {
@@ -74,6 +72,9 @@ public class ViewPagerAdapter extends PagerAdapter {
 
 
 
+
+
+
         PostModel postModel = mPostModel.get(position);
         mAuth = FirebaseAuth.getInstance();
         mFirestore = FirebaseFirestore.getInstance();
@@ -91,6 +92,19 @@ public class ViewPagerAdapter extends PagerAdapter {
         btnC = view.findViewById(R.id.C);
         btnD = view.findViewById(R.id.D);
         btnE = view.findViewById(R.id.E);
+
+        btnA.setEnabled(true);
+        btnB.setEnabled(true);
+        btnC.setEnabled(true);
+        btnD.setEnabled(true);
+        btnE.setEnabled(true);
+        btnA.setBackgroundColor(Color.BLUE);
+        btnB.setBackgroundColor(Color.BLUE);
+        btnC.setBackgroundColor(Color.BLUE);
+        btnD.setBackgroundColor(Color.BLUE);
+        btnE.setBackgroundColor(Color.BLUE);
+        post_setting.setVisibility(View.GONE);
+
 
 
         buttonSonrakiSoru.setOnClickListener(new View.OnClickListener() {

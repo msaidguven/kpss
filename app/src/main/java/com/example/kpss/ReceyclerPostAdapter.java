@@ -49,7 +49,7 @@ public class ReceyclerPostAdapter extends RecyclerView.Adapter<ReceyclerPostAdap
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext, PostViewActivity.class);
+                Intent intent = new Intent(mContext, PostListActivity.class);
                 intent.putExtra("postID", mData.get(position).getPostID());
                 intent.putExtra("time", mData.get(position).getTime());
                 intent.putExtra("time1", mData.get(position).getTime1());
